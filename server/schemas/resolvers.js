@@ -77,10 +77,12 @@ const resolvers = {
           },
           { new: true, runValidators: true }
         );
-
         return user;
       }
     },
+    getRecipe: async (parent, { userIngredient }) => {
+      //yada yada yada
+    }
   },
 };
 

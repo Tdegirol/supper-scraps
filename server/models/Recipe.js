@@ -6,7 +6,27 @@ const recipeSchema = new Schema({
     type: String,
     required: true
   },
+  id: {
+    type: Number,
+    required: true
+  },
+  ingredients: [ingredientSchema]
   // TODO: Choose API and replicate schema
+});
+
+const ingredientSchema = new Schema ({
+  name: {
+    type: String,
+    required: true
+  },
+  measurementUnit: {
+    type: String,
+    required: true
+  },
+  measurementSize: {
+    type: Number,
+    required: true
+  }
 });
 
 module.exports = recipeSchema;
