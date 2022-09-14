@@ -80,9 +80,9 @@ const resolvers = {
         return user;
       }
     },
-    getRecipe: async (parent, { userIngredient }) => {
-      //yada yada yada
-    }
+    // getRecipe: async (parent, { userIngredient }) => {
+    //   //yada yada yada
+    // }
   },
 };
 

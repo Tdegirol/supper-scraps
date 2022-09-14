@@ -11,7 +11,7 @@ const { typeDefs, resolvers } = require("./schemas");
 const { authMiddleware } = require("./utils/auth");
 
 const db = require('./config/connection');
-const fetchRecipe = require('./services/fetchRecipe');
+// const fetchRecipe = require('./services/fetchRecipe');
 
 const PORT = process.env.PORT || 3001;
 
@@ -27,8 +27,8 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-//add endpoint
-app.get('/', fetchRecipe);
+//add SOAP API endpoint
+app.use(require('./routes'));
 
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async (typeDefs, resolvers) => {

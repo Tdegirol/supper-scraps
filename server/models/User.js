@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, isValidObjectId } = require('mongoose');
 const bcrypt = require('bcrypt');
 
 // import schema from Recipe.js
@@ -22,7 +22,10 @@ const userSchema = new Schema(
       required: true,
     },
     // set savedBooks to be an array of data that adheres to the bookSchema
-    savedRecipes: [recipeSchema],
+    savedRecipes: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Recipe'
+    }],
   },
   // set this to use virtual below
   {
