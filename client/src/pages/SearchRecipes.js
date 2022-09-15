@@ -54,23 +54,24 @@ const SearchRecipes = () => {
     }
 
     try {
-      const response = await searchGoogleBooks(searchInput);
+      const response = await getRecipes(searchInput);
 
       if (!response.ok) {
         throw new Error('something went wrong!');
       }
 
-      const { items } = await response.json();
+      const items = response.data;
 
-      const bookData = items.map((book) => ({
-        bookId: book.id,
-        authors: book.volumeInfo.authors || ['No author to display'],
-        title: book.volumeInfo.title,
-        description: book.volumeInfo.description,
-        image: book.volumeInfo.imageLinks?.thumbnail || '',
+      const recipeData = items.map((recipe) => ({
+        recipeId: recipe.id,
+        name: recipe.name,
+        description: recipe.description,
+        thumbnail_url: recipe.thumbnail.url,
+        ingredients: recipe.ingredients,
+        instructions: recipe.instructions,
       }));
 
-      setSearchedBooks(bookData);
+      setSearchedRecipes(recipeData);
       setSearchInput('');
     } catch (err) {
       console.error(err);
@@ -119,7 +120,7 @@ const SearchRecipes = () => {
           {searchedRecipes.map((recipe) => {
             return (
               <Card key={recipe.id} border='dark'>
-                {book.image ? (
+                {recipe.thumbnail_url ? (
                   <Card.Img src={recipe.thumbnail_url} alt={`The thumbnail image for ${recipe.name}`} variant='top' />
                 ) : null}
                 <Card.Body>
@@ -128,10 +129,10 @@ const SearchRecipes = () => {
                   <Card.Text>{recipe.description}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
-                      disabled={savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.id)}
+                      disabled={user.savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.id)}
                       className='btn-block btn-info'
                       onClick={() => handleSaveRecipe(recipe)}>
-                      {savedRecipeIds?.some((savedRecipeId) => savedBookId === recipe.id)
+                      {user.savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.id)
                         ? 'This book has already been saved!'
                         : 'Save this Book!'}
                     </Button>
@@ -146,4 +147,4 @@ const SearchRecipes = () => {
   );
 };
 
-export default SearchBooks;
+export default SearchRecipes;

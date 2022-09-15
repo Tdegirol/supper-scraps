@@ -9,6 +9,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SearchRecipes from "./pages/SearchRecipes";
 import SavedRecipes from "./pages/SavedRecipes";
+import Navbar from "./components/Navbar";
 // import Nav from "./components/Nav";
 
 const httpLink = createHttpLink({
@@ -35,7 +36,7 @@ function App() {
     <ApolloProvider client={client}>
       <Router>
         <>
-          {/* <Nav /> */}
+          <Navbar />
           <Routes>
             <Route exact path="/" component={SearchRecipes} />
             <Route exact path="/saved" component={SavedRecipes} />
