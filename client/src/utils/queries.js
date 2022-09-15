@@ -18,7 +18,7 @@ export const GET_ME = gql`
   }
 `;
 
-export const QUERY_RECIPES = gql`
+export const GET_RECIPES = gql`
   query getRecipe($ingredients: String!) {
     getRecipe(ingredients: $ingredients) {
       name

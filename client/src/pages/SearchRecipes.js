@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { SAVE_RECIPE } from "../utils/mutations";
-import { QUERY_RECIPES, GET_ME } from "../utils/queries";
-import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'react-bootstrap';
+import { GET_RECIPES, GET_ME } from "../utils/queries";
+import {
+  Jumbotron,
+  Container,
+  Col,
+  Form,
+  Button,
+  Card,
+  CardColumns,
+} from "react-bootstrap";
 
-import Auth from '../utils/auth';
+import Auth from "../utils/auth";
 // import { saveBook, searchGoogleBooks } from '../utils/API';
 // This searchGoogleBooks is still a REST API
 // import { searchGoogleBooks } from '../utils/API';
@@ -14,15 +22,17 @@ const SearchRecipes = () => {
   // create state for holding returned graphql data
   const [searchedRecipes, setSearchedRecipes] = useState([]);
   // create state for holding our search field data
-  const [searchInput, setSearchInput] = useState('');
+  const [searchInput, setSearchInput] = useState("");
 
   // create state to hold saved bookId values
   // const [savedRecipeIds, setSavedRecipeIds] = useState(getSavedRecipeIds());
 
   // save book using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
-  const [getRecipes] = useQuery(QUERY_RECIPES);
-  const { loading, data} = useQuery(GET_ME);
+  // const [getRecipes] = useQuery(GET_RECIPES, {
+  //   variables: {searchInput}
+  // });
+  const { loading, data } = useQuery(GET_ME);
 
   const user = data?.me;
   if (!user?.username) {
@@ -34,74 +44,60 @@ const SearchRecipes = () => {
     );
   }
 
-  // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
-  // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
-  // useEffect(() => {
-  //   // return () => saveBookIds(savedBookIds);
-  //   saveBookIds(savedBookIds);
-  //   return function cleanup() {
-  //     // on cleanup delete localstorage by passing an empty array
-  //     saveBookIds([]);
-  //   }
-  // });
-
-  // create method to search for books and set state on form submit
-  const handleFormSubmit = async (event) => {
+  // create method to search for recipes and set state on form submit
+  async function HandleFormSubmit(event) {
     event.preventDefault();
 
     if (!searchInput) {
       return false;
     }
 
-    try {
-      const response = await getRecipes(searchInput);
+    const { loading, error, data } = useQuery(GET_RECIPES, {
+      variables: { searchInput },
+    });
 
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
+    if (loading) return null;
+    if (error) return `Error ${error}`;
 
-      const items = response.data;
+    const recipes = data;
 
-      const recipeData = items.map((recipe) => ({
-        recipeId: recipe.id,
-        name: recipe.name,
-        description: recipe.description,
-        thumbnail_url: recipe.thumbnail.url,
-        ingredients: recipe.ingredients,
-        instructions: recipe.instructions,
-      }));
+    const recipeData = recipes.map((recipe) => ({
+      recipeId: recipe.id,
+      name: recipe.name,
+      description: recipe.description,
+      thumbnail_url: recipe.thumbnail.url,
+      ingredients: recipe.ingredients,
+      instructions: recipe.instructions,
+    }));
 
-      setSearchedRecipes(recipeData);
-      setSearchInput('');
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    setSearchedRecipes(recipeData);
+    setSearchInput("");
+  }
 
   // create function to handle saving a book to our database
   const handleSaveRecipe = async (recipeId) => {
-
+    // TODO: Mutation
   };
 
   return (
     <>
-      <Jumbotron fluid className='text-light bg-dark'>
+      <Jumbotron fluid className="text-light bg-dark">
         <Container>
           <h1>Search for Recipes!</h1>
-          <Form onSubmit={handleFormSubmit}>
+          <Form onSubmit={HandleFormSubmit}>
             <Form.Row>
               <Col xs={12} md={8}>
                 <Form.Control
-                  name='searchInput'
+                  name="searchInput"
                   value={searchInput}
                   onChange={(e) => setSearchInput(e.target.value)}
-                  type='text'
-                  size='lg'
-                  placeholder='Search for a recipe by ingredients'
+                  type="text"
+                  size="lg"
+                  placeholder="Search for a recipe by ingredients"
                 />
               </Col>
               <Col xs={12} md={4}>
-                <Button type='submit' variant='success' size='lg'>
+                <Button type="submit" variant="success" size="lg">
                   Submit Search
                 </Button>
               </Col>
@@ -114,14 +110,18 @@ const SearchRecipes = () => {
         <h2>
           {searchedRecipes.length
             ? `Viewing ${searchedRecipes.length} results:`
-            : 'Search for a recipe to begin'}
+            : "Search for a recipe to begin"}
         </h2>
         <CardColumns>
           {searchedRecipes.map((recipe) => {
             return (
-              <Card key={recipe.id} border='dark'>
+              <Card key={recipe.id} border="dark">
                 {recipe.thumbnail_url ? (
-                  <Card.Img src={recipe.thumbnail_url} alt={`The thumbnail image for ${recipe.name}`} variant='top' />
+                  <Card.Img
+                    src={recipe.thumbnail_url}
+                    alt={`The thumbnail image for ${recipe.name}`}
+                    variant="top"
+                  />
                 ) : null}
                 <Card.Body>
                   <Card.Title>{recipe.name}</Card.Title>
@@ -129,12 +129,17 @@ const SearchRecipes = () => {
                   <Card.Text>{recipe.description}</Card.Text>
                   {Auth.loggedIn() && (
                     <Button
-                      disabled={user.savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.id)}
-                      className='btn-block btn-info'
-                      onClick={() => handleSaveRecipe(recipe)}>
-                      {user.savedRecipeIds?.some((savedRecipeId) => savedRecipeId === recipe.id)
-                        ? 'This book has already been saved!'
-                        : 'Save this Book!'}
+                      disabled={user.savedRecipeIds?.some(
+                        (savedRecipeId) => savedRecipeId === recipe.id
+                      )}
+                      className="btn-block btn-info"
+                      onClick={() => handleSaveRecipe(recipe)}
+                    >
+                      {user.savedRecipeIds?.some(
+                        (savedRecipeId) => savedRecipeId === recipe.id
+                      )
+                        ? "This book has already been saved!"
+                        : "Save this Book!"}
                     </Button>
                   )}
                 </Card.Body>

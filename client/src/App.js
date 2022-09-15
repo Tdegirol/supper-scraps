@@ -38,7 +38,7 @@ function App() {
         <>
           <Navbar />
           <Routes>
-            <Route exact path="/" component={SearchRecipes} />
+            <Route exact path="/" element={<SearchRecipes />} />
             <Route exact path="/saved" component={SavedRecipes} />
             <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
           </Routes>
