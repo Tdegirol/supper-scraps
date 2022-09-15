@@ -49,7 +49,6 @@ const resolvers = {
       return { token, user };
     },
     saveRecipe: async (parent, args, context) => {
-      console.log(args);
       if (context.user) {
         const user = await User.findOneAndUpdate(
           { _id: context.user._id },
@@ -66,13 +65,13 @@ const resolvers = {
 
       throw new AuthenticationError("You need to be logged in!");
     },
-    removeRecipe: async (parent, { id }, context) => {
+    removeRecipe: async (parent, { recipeId }, context) => {
       if (context.user) {
         const user = await User.findOneAndUpdate(
           { _id: context.user._id },
           {
             $pull: {
-              savedRecipies: { id: id },
+              savedRecipes: { id: recipeId },
             },
           },
           { new: true, runValidators: true }

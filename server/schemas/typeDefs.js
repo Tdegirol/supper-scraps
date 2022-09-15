@@ -8,7 +8,7 @@ const typeDefs = gql`
     id: Int
     description: String
     thumbnail_url: String
-    ingredient: [String]
+    ingredients: [String]
     directions: [String]
   }
 
@@ -42,7 +42,7 @@ const typeDefs = gql`
       ingredients: [String]
       directions: [String]
       ): User
-    removeRecipe(id: Int!): User
+    removeRecipe(recipeId: Int!): User
   }
 `;
 
