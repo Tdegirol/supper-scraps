@@ -22,23 +22,24 @@ router
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      res.json(data);
+      // console.log(data);
+      // res.json(data);
       //logic logic logic return new array
       recipeResults = response.results.filter(result => result.canonical_id.includes('recipe'))
       console.log(recipeResults)
       newRecipe = recipeResults.map(({name, id, instructions, sections}) => {
-        const newInstructions = instructions.map(({display_text}) => {
+        const directions = instructions.map(({display_text}) => {
         return {display_text};
         })
-        const newSections = sections[0].components.map(({raw_text}) => {
+        const ingredients = sections[0].components.map(({raw_text}) => {
         const rawText = raw_text
         return{rawText}
         })
         
-        return {name, id, newInstructions, newSections}
+        return {name, id, directions, ingredients}
       })
       console.log(newRecipe);
+      res.json(newRecipe);
     })
     .catch(err => {
       console.log(err);
