@@ -10,9 +10,15 @@ const recipeSchema = new Schema({
     type: Number,
     required: true
   },
+  description: {
+    type: String,
+    required: true
+  },
+  thumbnail_url: {
+    type: String
+  },
   ingredients: [String],
   directions: [String]
-  // TODO: Choose API and replicate schema
 });
 
 module.exports = recipeSchema;

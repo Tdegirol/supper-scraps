@@ -5,6 +5,11 @@ const { gql } = require("apollo-server-express");
 const typeDefs = gql`
   type Recipe {
     name: String!
+    id: Int
+    description: String
+    thumbnail_url: String
+    ingredient: [String]
+    directions: [String]
   }
 
   type User {
@@ -31,11 +36,13 @@ const typeDefs = gql`
     addUser(username: String!, email: String!, password: String!): Auth
     saveRecipe(
       name: String!
-      id: Number!
+      id: Int!
+      description: String
+      thumbnail_url: String
       ingredients: [String]
       directions: [String]
       ): User
-    removeRecipe(bookId: String!): User
+    removeRecipe(id: Int!): User
   }
 `;
 
