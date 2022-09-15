@@ -15,6 +15,4 @@ const recipeSchema = new Schema({
   // TODO: Choose API and replicate schema
 });
 
-const Recipe = model('Recipe', recipeSchema);
-
 module.exports = recipeSchema;
