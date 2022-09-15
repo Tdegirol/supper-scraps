@@ -1,6 +1,8 @@
-const { User } = require("../models");
+const { User, RecipeSchema } = require("../models");
 const { AuthenticationError } = require("apollo-server-express");
 const { signToken } = require("../utils/auth");
+const fetch = require("cross-fetch");
+require("dotenv").config();
 
 const resolvers = {
   Query: {
@@ -21,8 +23,66 @@ const resolvers = {
       return users;
     },
     getSingleUser: async (parent, { username }) => {
-      const userData = await User.findOne({ username }).select("-__v -password");
+      const userData = await User.findOne({ username }).select(
+        "-__v -password"
+      );
       return userData;
+    },
+    getRecipe: async (parent, { ingredients }) => {
+      let recipes = [RecipeSchema];
+      try {
+        // synchronous fetch - takes upwards of 2 seconds
+        const response = await fetch(
+          `https://tasty.p.rapidapi.com/recipes/list?from=0&size=40&q=${ingredients}`,
+          {
+            headers: {
+              "X-RapidAPI-Key": process.env.API_KEY,
+              "X-RapidAPI-Host": "tasty.p.rapidapi.com",
+            },
+          }
+        );
+        // response.ok?
+        const data = await response.json();
+        console.log(data);
+        // Filter out non-recipes
+        data.results = data.results.filter((result) =>
+          result.canonical_id.includes("recipe")
+        );
+        // deconstruct and save only the data we want
+        data.results = data.results.map(
+          ({
+            name,
+            id,
+            description,
+            thumbnail_url,
+            instructions,
+            sections,
+          }) => {
+            const directions = instructions.map(({ display_text }) => {
+              return display_text;
+            });
+            const ingredients = sections[0].components.map(({ raw_text }) => {
+              const rawText = raw_text;
+              return rawText;
+            });
+
+            return {
+              name,
+              id,
+              description,
+              thumbnail_url,
+              directions,
+              ingredients,
+            };
+          }
+        );
+        recipes = data.results;
+        return recipes;
+      } catch (err) {
+        console.log(err);
+        return;
+      }
+      //yada yada yada
     },
   },
   Mutation: {
@@ -79,9 +139,6 @@ const resolvers = {
         return user;
       }
     },
-    // getRecipe: async (parent, { userIngredient }) => {
-    //   //yada yada yada
-    // }
   },
 };
 
