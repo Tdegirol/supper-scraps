@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import {
+  useQuery,
+  useMutation,
+  useApolloClient,
+} from "@apollo/client";
 import { SAVE_RECIPE } from "../utils/mutations";
 import { GET_RECIPES, GET_ME } from "../utils/queries";
 import {
@@ -13,10 +17,6 @@ import {
 } from "react-bootstrap";
 
 import Auth from "../utils/auth";
-// import { saveBook, searchGoogleBooks } from '../utils/API';
-// This searchGoogleBooks is still a REST API
-// import { searchGoogleBooks } from '../utils/API';
-// import { saveRecipeIds, getSavedRecipeIds } from '../utils/localStorage';
 
 const SearchRecipes = () => {
   // create state for holding returned graphql data
@@ -27,21 +27,11 @@ const SearchRecipes = () => {
   // create state to hold saved bookId values
   // const [savedRecipeIds, setSavedRecipeIds] = useState(getSavedRecipeIds());
 
-  // save book using graphql
+  // save recipe using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
   const { loading, data } = useQuery(GET_ME);
-  const [
-    getRecipes,
-    { called: recipeCalled, loading: recipeLoading, data: recipeData },
-  ] = useLazyQuery(GET_RECIPES, { variables: { ingredients: searchInput } });
 
-  if (recipeCalled && !recipeLoading) {
-    if (searchedRecipes !== recipeData.getRecipe) {
-      console.log(recipeData.getRecipe);
-      setSearchedRecipes(recipeData.getRecipe) 
-      setSearchInput("")
-    } ;
-  }
+  const client = useApolloClient();
 
   const user = data?.me;
   // if (!user?.username) {
@@ -54,26 +44,22 @@ const SearchRecipes = () => {
   // }
 
   // create method to search for recipes and set state on form submit
-  const handleFormSubmit =  (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
 
     if (!searchInput) {
       return false;
     }
 
-    getRecipes(searchInput);
+    // graphql query
+    const { data } = await client.query({
+      query: GET_RECIPES,
+      variables: { ingredients: searchInput },
+    });
 
-    // const recipeData = recipes.map((recipe) => ({
-    //   recipeId: recipe.id,
-    //   name: recipe.name,
-    //   description: recipe.description,
-    //   thumbnail_url: recipe.thumbnail.url,
-    //   ingredients: recipe.ingredients,
-    //   instructions: recipe.instructions,
-    // }));
+    console.log(data.getRecipe);
+    setSearchedRecipes(data.getRecipe);
 
-    // setSearchedRecipes(recipeData);
- 
   };
 
   // create function to handle saving a book to our database
