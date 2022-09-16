@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  useQuery,
-  useMutation,
-  useApolloClient,
-} from "@apollo/client";
+import { useQuery, useMutation, useApolloClient } from "@apollo/client";
 import { SAVE_RECIPE } from "../utils/mutations";
 import { GET_RECIPES, GET_ME } from "../utils/queries";
 import {
@@ -59,12 +55,32 @@ const SearchRecipes = () => {
 
     console.log(data.getRecipe);
     setSearchedRecipes(data.getRecipe);
-
   };
 
   // create function to handle saving a book to our database
-  const handleSaveRecipe = async (recipeId) => {
-    // TODO: Mutation
+  const handleSaveRecipe = async (recipe) => {
+    // get token
+    const token = Auth.loggedIn() ? Auth.getToken() : null;
+
+    if (!token) {
+      return false;
+    }
+
+    try {
+      console.log(recipe.name, recipe.id, recipe.description, recipe.thumbnail_url, recipe.ingredients, recipe.directions);
+      await saveRecipe({
+        variables: {
+          name: recipe.name,
+          id: recipe.id,
+          description: recipe.description,
+          thumbnail_url: recipe.thumbnail_url,
+          ingredients: recipe.ingredients,
+          directions: recipe.directions
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

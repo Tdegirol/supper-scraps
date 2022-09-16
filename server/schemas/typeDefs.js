@@ -43,7 +43,7 @@ const typeDefs = gql`
       ingredients: [String]
       directions: [String]
       ): User
-    removeRecipe(recipeId: Int!): User
+    removeRecipe(id: Int!): User
   }
 `;
 

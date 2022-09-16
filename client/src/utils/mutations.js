@@ -27,7 +27,7 @@ export const ADD_USER = gql`
 export const SAVE_RECIPE = gql`
   mutation saveRecipe(
     $name: String!
-    $saveRecipeId: Int!
+    $id: Int!
     $description: String
     $thumbnail_url: String
     $ingredients: [String]
@@ -35,7 +35,7 @@ export const SAVE_RECIPE = gql`
   ) {
     saveRecipe(
       name: $name
-      id: $saveRecipeId
+      id: $id
       description: $description
       thumbnail_url: $thumbnail_url
       ingredients: $ingredients
@@ -44,12 +44,12 @@ export const SAVE_RECIPE = gql`
       _id
       username
       savedRecipes {
-        authors
+        name
+        id
         description
-        recipeId
-        image
-        link
-        title
+        thumbnail_url
+        ingredients
+        directions
       }
     }
   }
@@ -58,13 +58,13 @@ export const SAVE_RECIPE = gql`
 export const REMOVE_RECIPE = gql`
   mutation removeRecipe($id: Int!) {
     removeRecipe(
-      recipeId: $id
+      id: $id
     ) {
       _id
       username
       savedRecipes {
         name
-        recipeId
+        id
         description
         thumbnail_url
         ingredients

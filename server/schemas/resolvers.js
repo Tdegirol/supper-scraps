@@ -43,7 +43,7 @@ const resolvers = {
         );
         // response.ok?
         const data = await response.json();
-        console.log(data);
+        console.log(`Fetch to tasty API executed for ${ingredients}: results ${data.results.length}`);
         // Filter out non-recipes
         data.results = data.results.filter((result) =>
           result.canonical_id.includes("recipe")
@@ -110,6 +110,7 @@ const resolvers = {
     },
     saveRecipe: async (parent, args, context) => {
       if (context.user) {
+        console.log(args);
         const user = await User.findOneAndUpdate(
           { _id: context.user._id },
           {
@@ -125,13 +126,13 @@ const resolvers = {
 
       throw new AuthenticationError("You need to be logged in!");
     },
-    removeRecipe: async (parent, { recipeId }, context) => {
+    removeRecipe: async (parent, { id }, context) => {
       if (context.user) {
         const user = await User.findOneAndUpdate(
           { _id: context.user._id },
           {
             $pull: {
-              savedRecipes: { id: recipeId },
+              savedRecipes: { id: id },
             },
           },
           { new: true, runValidators: true }
