@@ -5,11 +5,16 @@ import { GET_RECIPES, GET_ME } from "../utils/queries";
 import {
   Jumbotron,
   Container,
+  Row,
   Col,
   Form,
   Button,
   Card,
   CardColumns,
+  Modal,
+  ListGroup,
+  Spinner,
+  Image
 } from "react-bootstrap";
 
 import Auth from "../utils/auth";
@@ -17,8 +22,12 @@ import Auth from "../utils/auth";
 const SearchRecipes = () => {
   // create state for holding returned graphql data
   const [searchedRecipes, setSearchedRecipes] = useState([]);
+  // create state for holding clicked recipe
+  const [recipe, setRecipe] = useState({});
   // create state for holding our search field data
   const [searchInput, setSearchInput] = useState("");
+  // set modal display state
+  const [showModal, setShowModal] = useState(false);
 
   // create state to hold saved bookId values
   // const [savedRecipeIds, setSavedRecipeIds] = useState(getSavedRecipeIds());
@@ -67,7 +76,14 @@ const SearchRecipes = () => {
     }
 
     try {
-      console.log(recipe.name, recipe.id, recipe.description, recipe.thumbnail_url, recipe.ingredients, recipe.directions);
+      console.log(
+        recipe.name,
+        recipe.id,
+        recipe.description,
+        recipe.thumbnail_url,
+        recipe.ingredients,
+        recipe.directions
+      );
       await saveRecipe({
         variables: {
           name: recipe.name,
@@ -75,7 +91,7 @@ const SearchRecipes = () => {
           description: recipe.description,
           thumbnail_url: recipe.thumbnail_url,
           ingredients: recipe.ingredients,
-          directions: recipe.directions
+          directions: recipe.directions,
         },
       });
     } catch (err) {
@@ -119,7 +135,15 @@ const SearchRecipes = () => {
         <CardColumns>
           {searchedRecipes.map((recipe) => {
             return (
-              <Card key={recipe.id} border="dark">
+              <Card
+                key={recipe.id}
+                border="dark"
+                className="cp"
+                onClick={() => {
+                  setRecipe(recipe);
+                  setShowModal(true);
+                }}
+              >
                 {recipe.thumbnail_url ? (
                   <Card.Img
                     src={recipe.thumbnail_url}
@@ -152,6 +176,56 @@ const SearchRecipes = () => {
           })}
         </CardColumns>
       </Container>
+      {/* set modal data up */}
+      <Modal
+        size="xl"
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        aria-labelledby="recipe-modal"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="recipe-modal">
+            <h2>{recipe.name}</h2>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Row>
+          <Col xs={12} md={8}>
+          <p>{recipe.description}</p>
+          </Col>
+          <Col xs={12} md={4}>
+          {recipe.thumbnail_url ? (
+            <Image
+              src={recipe.thumbnail_url}
+              alt={`The thumbnail image for ${recipe.name}`}
+              fluid
+            />
+          ) : null}
+          </Col>          </Row>
+          <Container handleModalClose={() => setShowModal(false)}>
+            <Row>
+              <Col xs={12} md={4}>
+                <h4>Ingredients</h4>
+                <ListGroup variant="flush">
+                  {recipe.ingredients &&
+                    recipe.ingredients.map((ingredient, index) => {
+                      return <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>;
+                    })}
+                </ListGroup>
+              </Col>
+              <Col xs={12} md={8}>
+                <h4>Directions</h4>
+                <ListGroup variant="flush">
+                  {recipe.directions &&
+                    recipe.directions.map((direction, index) => {
+                      return <ListGroup.Item key={index}>{direction}</ListGroup.Item>;
+                    })}
+                </ListGroup>
+              </Col>
+            </Row>
+          </Container>
+        </Modal.Body>
+      </Modal>
     </>
   );
 };
