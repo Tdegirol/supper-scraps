@@ -10,31 +10,31 @@ const SavedRecipes = () => {
   const { loading, data } = useQuery(GET_ME);
   let userData = data?.me || {};
   const [removeRecipe, {error}] = useMutation(REMOVE_RECIPE);
-
+  console.log(userData);
   // create function that accepts the recipe's mongo _id value as param and deletes the recipe from the database
-  const handleDeleteRecipes = async (recipeId) => {
+  const handleDeleteRecipes = async (id) => {
+    // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
       return false;
     }
 
-//commenting out lines below bc removing localStorage.
-    // try {
-    //   await removeRecipe({
-    //     variables: { id: recipeId },
-    //   });
-
-    //   // upon success, remove recipe's id from localStorage
-    //   removeRecipeId(recipeId);
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    try {
+      console.log(id);
+      await removeRecipe({
+        variables: {
+          id: id,
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   // if data isn't here yet, say so
   if (loading) {
-    return <h2>LOADING...</h2>;
+    return (<h2>LOADING...</h2>);
   }
 
   return (
@@ -46,7 +46,7 @@ const SavedRecipes = () => {
       </Jumbotron>
       <Container>
         <h2>
-          {userData.SavedRecipes.length
+          {userData.savedRecipes.length
             ? `Viewing ${userData.savedRecipes.length} saved ${userData.savedRecipes.length === 1 ? 'recipe' : 'recipes'}:`
             : 'You have no saved recipes!'}
         </h2>
@@ -54,13 +54,13 @@ const SavedRecipes = () => {
           {userData.savedRecipes.map((recipe) => {
             return (
               <Card key={recipe.recipeId} border='dark'>
-                {recipe.image ? <Card.Img src={recipe.image} alt={`The cover for ${recipe.title}`} variant='top' /> : null}
+                {recipe.thumbnail_url ? <Card.Img src={recipe.thumbnail_url} alt={`The image for ${recipe.name}`} variant='top' /> : null}
                 <Card.Body>
-                  <Card.Title>{recipe.title}</Card.Title>
-                  <p className='small'>Authors: {recipe.authors}</p>
+                  <Card.Title>{recipe.name}</Card.Title>
+                  {/* <p className='small'>Authors: {recipe.authors}</p> */}
                   <Card.Text>{recipe.description}</Card.Text>
-                  <Button className='btn-block btn-danger' onClick={() => handleDeleteRecipes(recipe.recipeId)}>
-                    Delete this Book!
+                  <Button className='btn-block btn-danger' onClick={() => handleDeleteRecipes(recipe.id)}>
+                    Delete this Recipe!
                   </Button>
                 </Card.Body>
               </Card>

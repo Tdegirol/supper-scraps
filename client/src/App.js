@@ -39,7 +39,7 @@ function App() {
           <Navbar />
           <Routes>
             <Route exact path="/" element={<SearchRecipes />} />
-            <Route exact path="/saved" component={SavedRecipes} />
+            <Route exact path="/saved" element={<SavedRecipes />} />
             <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
           </Routes>
         </>
