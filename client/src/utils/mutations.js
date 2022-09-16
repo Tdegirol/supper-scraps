@@ -46,7 +46,7 @@ export const SAVE_RECIPE = gql`
       savedRecipes {
         authors
         description
-        bookId
+        recipeId
         image
         link
         title
@@ -64,7 +64,7 @@ export const REMOVE_RECIPE = gql`
       username
       savedRecipes {
         name
-        id
+        recipeId
         description
         thumbnail_url
         ingredients

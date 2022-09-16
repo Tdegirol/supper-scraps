@@ -36,8 +36,11 @@ const SearchRecipes = () => {
   ] = useLazyQuery(GET_RECIPES, { variables: { ingredients: searchInput } });
 
   if (recipeCalled && !recipeLoading) {
-    console.log(recipeData.getRecipe);
-    if (searchedRecipes !== recipeData.getRecipe) setSearchedRecipes(recipeData.getRecipe);
+    if (searchedRecipes !== recipeData.getRecipe) {
+      console.log(recipeData.getRecipe);
+      setSearchedRecipes(recipeData.getRecipe) 
+      setSearchInput("")
+    } ;
   }
 
   const user = data?.me;
@@ -70,7 +73,7 @@ const SearchRecipes = () => {
     // }));
 
     // setSearchedRecipes(recipeData);
-    setSearchInput("");
+ 
   };
 
   // create function to handle saving a book to our database
@@ -137,8 +140,8 @@ const SearchRecipes = () => {
                       {user.savedRecipeIds?.some(
                         (savedRecipeId) => savedRecipeId === recipe.id
                       )
-                        ? "This book has already been saved!"
-                        : "Save this Book!"}
+                        ? "This recipe has already been saved!"
+                        : "Save this Recipe!"}
                     </Button>
                   )}
                 </Card.Body>
