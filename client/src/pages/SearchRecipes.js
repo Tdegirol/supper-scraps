@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import { SAVE_RECIPE } from "../utils/mutations";
 import { GET_RECIPES, GET_ME } from "../utils/queries";
 import {
@@ -29,50 +29,49 @@ const SearchRecipes = () => {
 
   // save book using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
-  // const [getRecipes] = useQuery(GET_RECIPES, {
-  //   variables: {searchInput}
-  // });
   const { loading, data } = useQuery(GET_ME);
+  const [
+    getRecipes,
+    { called: recipeCalled, loading: recipeLoading, data: recipeData },
+  ] = useLazyQuery(GET_RECIPES, { variables: { ingredients: searchInput } });
 
-  const user = data?.me;
-  if (!user?.username) {
-    return (
-      <h4>
-        You need to be logged in to see this page. Use the navigation links
-        above to sign up or log in!
-      </h4>
-    );
+  if (recipeCalled && !recipeLoading) {
+    console.log(recipeData.getRecipe);
+    if (searchedRecipes !== recipeData.getRecipe) setSearchedRecipes(recipeData.getRecipe);
   }
 
+  const user = data?.me;
+  // if (!user?.username) {
+  //   return (
+  //     <h4>
+  //       You need to be logged in to see this page. Use the navigation links
+  //       above to sign up or log in!
+  //     </h4>
+  //   );
+  // }
+
   // create method to search for recipes and set state on form submit
-  async function HandleFormSubmit(event) {
+  const handleFormSubmit =  (event) => {
     event.preventDefault();
 
     if (!searchInput) {
       return false;
     }
 
-    const { loading, error, data } = useQuery(GET_RECIPES, {
-      variables: { searchInput },
-    });
+    getRecipes(searchInput);
 
-    if (loading) return null;
-    if (error) return `Error ${error}`;
+    // const recipeData = recipes.map((recipe) => ({
+    //   recipeId: recipe.id,
+    //   name: recipe.name,
+    //   description: recipe.description,
+    //   thumbnail_url: recipe.thumbnail.url,
+    //   ingredients: recipe.ingredients,
+    //   instructions: recipe.instructions,
+    // }));
 
-    const recipes = data;
-
-    const recipeData = recipes.map((recipe) => ({
-      recipeId: recipe.id,
-      name: recipe.name,
-      description: recipe.description,
-      thumbnail_url: recipe.thumbnail.url,
-      ingredients: recipe.ingredients,
-      instructions: recipe.instructions,
-    }));
-
-    setSearchedRecipes(recipeData);
+    // setSearchedRecipes(recipeData);
     setSearchInput("");
-  }
+  };
 
   // create function to handle saving a book to our database
   const handleSaveRecipe = async (recipeId) => {
@@ -84,7 +83,7 @@ const SearchRecipes = () => {
       <Jumbotron fluid className="text-light bg-dark">
         <Container>
           <h1>Search for Recipes!</h1>
-          <Form onSubmit={HandleFormSubmit}>
+          <Form onSubmit={handleFormSubmit}>
             <Form.Row>
               <Col xs={12} md={8}>
                 <Form.Control
