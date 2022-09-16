@@ -209,7 +209,13 @@ const SearchRecipes = () => {
                 <ListGroup variant="flush">
                   {recipe.ingredients &&
                     recipe.ingredients.map((ingredient, index) => {
-                      return <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>;
+                      const arraySearch = searchInput.split(' ');
+                      const isPresent = arraySearch.reduce((is, word) => is || ingredient.includes(word), false);
+                      if (isPresent) {
+                        return <ListGroup.Item variant="success" key={index}>{ingredient}</ListGroup.Item>;  
+                      } else {
+                        return <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>;
+                      }
                     })}
                 </ListGroup>
               </Col>
