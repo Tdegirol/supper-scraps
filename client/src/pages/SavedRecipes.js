@@ -10,11 +10,11 @@ import { useQuery, useMutation } from "@apollo/client";
 const SavedRecipes = () => {
   const { loading, data } = useQuery(GET_ME);
   let userData = data?.me || {};
-  const [removeRecipe, {error}] = useMutation(REMOVE_RECIPE);
+  // removed error from [removeRecipe, {error}] since we don't call it.
+  const [removeRecipe] = useMutation(REMOVE_RECIPE);
   console.log(userData);
   const [recipe, setRecipe] = useState({});
   const [showModal, setShowModal] = useState(false);
-  // const [searchInput, setSearchInput] = useState("");
 
   // create function that accepts the recipe's mongo _id value as param and deletes the recipe from the database
   const handleDeleteRecipes = async (id) => {
@@ -98,7 +98,6 @@ const SavedRecipes = () => {
         show={showModal}
         onHide={() => setShowModal(false)}
         aria-labelledby="recipe-modal"
-        // className="my-modal"
       >
         <Modal.Header closeButton>
           <Modal.Title id="recipe-modal">
@@ -122,11 +121,6 @@ const SavedRecipes = () => {
                   <ListGroup variant="flush">
                     {recipe.ingredients &&
                       recipe.ingredients.map((ingredient, index) => {
-                        // const arraySearch = searchInput.split(' ');
-                        // const isPresent = arraySearch.reduce((is, word) => is || ingredient.includes(word), false);
-                        // if (isPresent) {
-                        //   return <ListGroup.Item variant="success" key={index}>{ingredient}</ListGroup.Item>;  
-                        // } else {
                           return <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>;
                         })
                       }
