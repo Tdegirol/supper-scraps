@@ -66,10 +66,6 @@ const SavedRecipes = () => {
                 key={recipe.recipeId} 
                 border='dark'
                 className="savedRecipeCard"
-                onClick={() => {
-                  setRecipe(recipe);
-                  setShowModal(true);
-                }}
                 >
                 {recipe.thumbnail_url ? (
                 <Card.Img 
@@ -81,6 +77,14 @@ const SavedRecipes = () => {
                 <Card.Body>
                   <Card.Title>{recipe.name}</Card.Title>
                   {/* <p className='small'>Authors: {recipe.authors}</p> */}
+                  <Card.Text>{recipe.description}</Card.Text>
+                  <Button className='btn-block btn-' variant='success'                
+                  onClick={() => {
+                  setRecipe(recipe);
+                  setShowModal(true);
+                }}>
+                    View this Recipe!
+                  </Button>
                   <Card.Text>{recipe.description}</Card.Text>
                   <Button className='btn-block btn-danger' onClick={() => handleDeleteRecipes(recipe.id)}>
                     Delete this Recipe!
