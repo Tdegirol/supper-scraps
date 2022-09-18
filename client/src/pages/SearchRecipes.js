@@ -151,10 +151,11 @@ const SearchRecipes = () => {
                 key={recipe.id}
                 border="dark"
                 className="cp"
-                onClick={() => {
-                  setRecipe(recipe);
-                  setShowModal(true);
-                }}
+                // removed and put into button functionality
+                // onClick={() => {
+                //   setRecipe(recipe);
+                //   setShowModal(true);
+                // }}
               >
                 {recipe.thumbnail_url ? (
                   <Card.Img
@@ -167,6 +168,15 @@ const SearchRecipes = () => {
                   <Card.Title>{recipe.name}</Card.Title>
                   {/* <p className='small'>Authors: {book.authors}</p> */}
                   <Card.Text>{recipe.description}</Card.Text>
+                  <Button 
+                  className='btn-block btn-' 
+                  variant='success'                
+                  onClick={() => {
+                  setRecipe(recipe);
+                  setShowModal(true);
+                }}>
+                    View this Recipe!
+                  </Button>
                   {Auth.loggedIn() && (
                     <Button
                       disabled={user.savedRecipeIds?.some(
