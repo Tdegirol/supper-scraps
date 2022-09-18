@@ -35,9 +35,10 @@ const SearchRecipes = () => {
   const [searchInput, setSearchInput] = useState("");
   // set modal display state
   const [showModal, setShowModal] = useState(false);
-
-  // create state to hold saved bookId values
-  // const [savedRecipeIds, setSavedRecipeIds] = useState(getSavedRecipeIds());
+  // create state to hold saved recipeId values
+  // this is used to utilize useEffect hook to save savedRecipeIds to local storage. 
+  // We aren't using local storage - would just use for MongoDB?
+  // ******* const [savedRecipeIds, setSavedRecipeIds] = useState(getSavedRecipeIds());
 
   // save recipe using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
@@ -77,6 +78,7 @@ const SearchRecipes = () => {
     // console.log(background);
 
     setSearchedRecipes(data.getRecipe);
+    console.log(searchedRecipes[0].name)
   };
 
   // create function to handle saving a book to our database
@@ -170,8 +172,8 @@ const SearchRecipes = () => {
                   {/* <p className='small'>Authors: {book.authors}</p> */}
                   <Card.Text>{recipe.description}</Card.Text>
                   <Button 
-                  className='btn-block btn-' 
-                  variant='success'                
+                  className='btn-block btn- border-dark' 
+                  variant='light'                
                   onClick={() => {
                   setRecipe(recipe);
                   setShowModal(true);
