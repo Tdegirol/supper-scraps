@@ -11,6 +11,7 @@ import {
   Button,
   Card,
   CardColumns,
+  Grid,
   Modal,
   ListGroup,
   Spinner,
@@ -18,6 +19,12 @@ import {
 } from "react-bootstrap";
 
 import Auth from "../utils/auth";
+const backgroundArr = require('../utils/pics');
+const backgroundPic = {
+  backgroundImage: `url(${backgroundArr[0]})`,
+  backgroundSize:'contain'
+}
+
 
 const SearchRecipes = () => {
   // create state for holding returned graphql data
@@ -62,7 +69,12 @@ const SearchRecipes = () => {
       variables: { ingredients: searchInput },
     });
 
-    console.log(data.getRecipe);
+    // console.log(data.getRecipe);
+    // const background = data.getRecipe.map(pics => {
+    //   return(pics.thumbnail_url)
+    // })
+    // console.log(background);
+
     setSearchedRecipes(data.getRecipe);
   };
 
@@ -101,31 +113,31 @@ const SearchRecipes = () => {
 
   return (
     <>
-      <Jumbotron fluid className="text-light bg-dark">
-        <Container>
-          <h1>Search for Recipes!</h1>
-          <Form onSubmit={handleFormSubmit}>
-            <Form.Row>
-              <Col xs={12} md={8}>
-                <Form.Control
-                  name="searchInput"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  type="text"
-                  size="lg"
-                  placeholder="Search for a recipe by ingredients"
-                />
-              </Col>
-              <Col xs={12} md={4}>
-                <Button type="submit" variant="success" size="lg">
-                  Submit Search
-                </Button>
-              </Col>
-            </Form.Row>
-          </Form>
-        </Container>
+      <Jumbotron fluid className="text-light bg-dark jumbo" >
+          <Container>
+            <h1>Search for Recipes!</h1>
+            <Form onSubmit={handleFormSubmit}>
+              <Form.Row>
+                <Col xs={12} md={8}>
+                  <Form.Control
+                    name="searchInput"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    type="text"
+                    size="lg"
+                    placeholder="Search for a recipe by ingredients"
+                  />
+                </Col>
+                <Col xs={12} md={4}>
+                  <Button type="submit" variant="success" size="lg">
+                    Submit Search
+                  </Button>
+                </Col>
+              </Form.Row>
+            </Form>
+          </Container>
       </Jumbotron>
-
+      <div className='wrap' style={backgroundPic}>
       <Container>
         <h2>
           {searchedRecipes.length
@@ -176,59 +188,58 @@ const SearchRecipes = () => {
           })}
         </CardColumns>
       </Container>
+      </div>
       {/* set modal data up */}
       <Modal
         size="xl"
         show={showModal}
         onHide={() => setShowModal(false)}
         aria-labelledby="recipe-modal"
+        // className="my-modal"
       >
         <Modal.Header closeButton>
           <Modal.Title id="recipe-modal">
             <h2>{recipe.name}</h2>
+            <h5>{recipe.description}</h5>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Row>
-          <Col xs={12} md={8}>
-          <p>{recipe.description}</p>
-          </Col>
-          <Col xs={12} md={4}>
-          {recipe.thumbnail_url ? (
-            <Image
-              src={recipe.thumbnail_url}
-              alt={`The thumbnail image for ${recipe.name}`}
-              fluid
-            />
-          ) : null}
-          </Col>          </Row>
+            <Col xs={12} md={3}>
+            {recipe.thumbnail_url ? (
+              <Image
+                src={recipe.thumbnail_url}
+                alt={`The thumbnail image for ${recipe.name}`}
+                fluid
+              />
+            ) : null}
+            </Col>
+            <Col xs={12} md={3}>
+                  <h4>Ingredients</h4>
+                  <ListGroup variant="flush">
+                    {recipe.ingredients &&
+                      recipe.ingredients.map((ingredient, index) => {
+                        const arraySearch = searchInput.split(' ');
+                        const isPresent = arraySearch.reduce((is, word) => is || ingredient.includes(word), false);
+                        if (isPresent) {
+                          return <ListGroup.Item variant="success" key={index}>{ingredient}</ListGroup.Item>;  
+                        } else {
+                          return <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>;
+                        }
+                      })}
+                  </ListGroup>
+            </Col>
+            <Col xs={12} md={6}>
+              <h4>Directions</h4>
+              <ListGroup variant="flush">
+                {recipe.directions &&
+                  recipe.directions.map((direction, index) => {
+                    return <ListGroup.Item key={index}>{direction}</ListGroup.Item>;
+                  })}
+              </ListGroup>
+            </Col>
+          </Row>
           <Container handleModalClose={() => setShowModal(false)}>
-            <Row>
-              <Col xs={12} md={4}>
-                <h4>Ingredients</h4>
-                <ListGroup variant="flush">
-                  {recipe.ingredients &&
-                    recipe.ingredients.map((ingredient, index) => {
-                      const arraySearch = searchInput.split(' ');
-                      const isPresent = arraySearch.reduce((is, word) => is || ingredient.includes(word), false);
-                      if (isPresent) {
-                        return <ListGroup.Item variant="success" key={index}>{ingredient}</ListGroup.Item>;  
-                      } else {
-                        return <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>;
-                      }
-                    })}
-                </ListGroup>
-              </Col>
-              <Col xs={12} md={8}>
-                <h4>Directions</h4>
-                <ListGroup variant="flush">
-                  {recipe.directions &&
-                    recipe.directions.map((direction, index) => {
-                      return <ListGroup.Item key={index}>{direction}</ListGroup.Item>;
-                    })}
-                </ListGroup>
-              </Col>
-            </Row>
           </Container>
         </Modal.Body>
       </Modal>
