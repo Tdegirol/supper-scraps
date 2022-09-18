@@ -11,10 +11,10 @@ import {
   Button,
   Card,
   CardColumns,
-  Grid,
   Modal,
   ListGroup,
-  Spinner,
+  // Grid,
+  // Spinner,
   Image
 } from "react-bootstrap";
 
@@ -41,7 +41,8 @@ const SearchRecipes = () => {
 
   // save recipe using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
-  const { loading, data } = useQuery(GET_ME);
+  // rremoved loading from const { loading, data } since we aren't calling it... yet. 
+  const { data } = useQuery(GET_ME);
 
   const client = useApolloClient();
 

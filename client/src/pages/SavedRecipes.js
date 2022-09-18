@@ -85,7 +85,6 @@ const SavedRecipes = () => {
                 }}>
                     View this Recipe!
                   </Button>
-                  <Card.Text>{recipe.description}</Card.Text>
                   <Button className='btn-block btn-danger' onClick={() => handleDeleteRecipes(recipe.id)}>
                     Delete this Recipe!
                   </Button>
