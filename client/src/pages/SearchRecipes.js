@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation, useApolloClient } from "@apollo/client";
 import { SAVE_RECIPE } from "../utils/mutations";
 import { GET_RECIPES, GET_ME } from "../utils/queries";

@@ -1,5 +1,22 @@
 # Getting Started with Create React App
 
+AS AN avid cooker and personal chef
+I WANT to use an app that can offer recipe options and creations based on the ingredients I already have
+SO THAT I can cook a meal without having to run out to the store
+GIVEN a single-page application for virtually any user
+WHEN I load the page
+THEN I am prompted to create an account or sign in
+WHEN I view the homepage
+THEN I am presented with a header consisting of these sections: Home, My Dashboard, Inspirations, Logout
+WHEN I view the Home page (for any user, guest or member to use)
+THEN I am given an input field to enter ingredients that I have one at a time
+WHEN I view My Dashboard (account members only)
+THEN I am shown my previous recipe options
+WHEN I view Inspirations
+THEN I am presented with random options of recipes from the database(or API)
+WHEN I Logout
+THEN my account is signed out
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
