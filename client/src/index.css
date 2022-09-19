@@ -17,22 +17,31 @@ code {
   cursor: pointer;
 }
 
-.mosaic-container {
+.main-mosaic-container {
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.mosaic-container {
+  width: 150vh;
+  height: 100vh;
+  padding-left: 0px;
+  overflow-y: hidden;
 }
 
 .mosaic-image {
   width: 100%;
   height: 100%;
-  object-fit:contain;
+  object-fit:none;
   padding: 1px;
 }
 
 .mosaic-row {
   height: 200px;
-  width: 100%;
   margin: 1px;
+  flex-wrap: wrap;
 }
 
 .mosaic-col {
