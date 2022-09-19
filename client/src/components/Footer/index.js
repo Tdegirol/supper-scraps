@@ -4,7 +4,7 @@ import { Button, Card } from "react-bootstrap"
 
 const Footer = () => {
   return (
-    <Card className="text-center">
+    <Card className="text-center text-light bg-dark">
       <Card.Body>
         <Card.Title>Why Use This App</Card.Title>
         {/* <Button variant="primary" className="mx-4">Environmental</Button>
@@ -14,7 +14,7 @@ const Footer = () => {
         {/* <h1>Search for Recipes!</h1>
         <h1>Search for Recipes!</h1>
         <h1>Search for Recipes!</h1> */}
-          Spend less money |  Decrease methane buildup in landfills  |  Avoid the grocery store.
+          Spend less money |  Decrease GreenHouse Gases  |  Avoid the grocery store.
         </Card.Text>
       </Card.Body>
     </Card>
