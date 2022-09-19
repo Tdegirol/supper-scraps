@@ -20,11 +20,11 @@ import {
 import Mosaic from '../components/Mosaic';
 
 import Auth from "../utils/auth";
-const backgroundArr = require("../utils/pics");
-const backgroundPic = {
-  backgroundImage: `url(${backgroundArr[0]})`,
-  backgroundSize: "contain",
-};
+// const backgroundArr = require("../utils/pics");
+// const backgroundPic = {
+//   backgroundImage: `url(${backgroundArr[0]})`,
+//   backgroundSize: "contain",
+// };
 
 const SearchRecipes = () => {
   // create state for holding returned graphql data

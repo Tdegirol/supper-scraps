@@ -9,6 +9,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SearchRecipes from "./pages/SearchRecipes";
 import SavedRecipes from "./pages/SavedRecipes";
+import Inspirations from "./pages/Inspirations";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -42,6 +43,8 @@ function App() {
           <Routes>
             <Route exact path="/" element={<SearchRecipes />} />
             <Route exact path="/saved" element={<SavedRecipes />} />
+            <Route exact path="/inspirations" element={<Inspirations />} />
+
             <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
           </Routes>
           </div>

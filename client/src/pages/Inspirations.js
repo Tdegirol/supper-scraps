@@ -46,7 +46,7 @@ const SavedRecipes = () => {
     <>
       <Jumbotron fluid className='text-light bg-dark'>
         <Container>
-          <h1>Viewing saved Recipes!</h1>
+          <h1>Need some ideas?</h1>
         </Container>
       </Jumbotron>
       {/* added another div- don't know if needed, but if want to set background */}
@@ -54,7 +54,9 @@ const SavedRecipes = () => {
       // style={backgroundPic}
       >
       <Container>
-        <h2>
+        <h2> Need to figure out how to call api to pull random recipes </h2>
+        <h2> Currently showing saved recipes...  </h2>
+            <h2>
           {userData.savedRecipes.length
             ? `Viewing ${userData.savedRecipes.length} saved ${userData.savedRecipes.length === 1 ? 'recipe' : 'recipes'}:`
             : 'You have no saved recipes!'}
