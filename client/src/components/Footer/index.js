@@ -3,14 +3,14 @@ import { Card } from "react-bootstrap"
 
 const Footer = () => {
   return (
-    <Card className="text-center text-light bg-dark">
-      <Card.Body>
-        <Card.Title>Why Use This App</Card.Title>
-        <Card.Text className='my-4'>
+    <div className="text-center text-light bg-dark">
+      <div>
+        <h1>Why Use This App</h1>
+        <p className='my-4'>
           Spend less money |  Decrease GreenHouse Gases  |  Avoid the grocery store.
-        </Card.Text>
-      </Card.Body>
-    </Card>
+        </p>
+      </div>
+    </div>
   );
 };
 
