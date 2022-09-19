@@ -10,7 +10,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SearchRecipes from "./pages/SearchRecipes";
 import SavedRecipes from "./pages/SavedRecipes";
 import Navbar from "./components/Navbar";
-// import Nav from "./components/Nav";
+import Footer from "./components/Footer";
+
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -42,6 +43,7 @@ function App() {
             <Route exact path="/saved" element={<SavedRecipes />} />
             <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
           </Routes>
+          <Footer />
         </>
       </Router>
     </ApolloProvider>
