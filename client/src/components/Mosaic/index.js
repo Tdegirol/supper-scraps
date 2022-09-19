@@ -23,12 +23,13 @@ const Mosaic = () => {
     "16.jpg",
     "17.jpg",
     "18.jpg",
-    "0.jpg",
-    "1.jpg",
-    "2.jpg",
-    "3.jpg",
-    "4.jpg",
-
+    "19.jpg",
+    "20.jpg",
+    "21.jpg",
+    "22.jpg",
+    "23.jpg",
+    "24.jpg",
+    "25.jpg"
   ];
 
   return (
