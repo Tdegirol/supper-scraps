@@ -15,16 +15,16 @@ import {
   ListGroup,
   // Grid,
   // Spinner,
-  Image
+  Image,
 } from "react-bootstrap";
+import Mosaic from '../components/Mosaic';
 
 import Auth from "../utils/auth";
-const backgroundArr = require('../utils/pics');
+const backgroundArr = require("../utils/pics");
 const backgroundPic = {
   backgroundImage: `url(${backgroundArr[0]})`,
-  backgroundSize:'contain'
-}
-
+  backgroundSize: "contain",
+};
 
 const SearchRecipes = () => {
   // create state for holding returned graphql data
@@ -36,13 +36,13 @@ const SearchRecipes = () => {
   // set modal display state
   const [showModal, setShowModal] = useState(false);
   // create state to hold saved recipeId values
-  // this is used to utilize useEffect hook to save savedRecipeIds to local storage. 
+  // this is used to utilize useEffect hook to save savedRecipeIds to local storage.
   // We aren't using local storage - would just use for MongoDB?
   // ******* const [savedRecipeIds, setSavedRecipeIds] = useState(getSavedRecipeIds());
 
   // save recipe using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
-  // rremoved loading from const { loading, data } since we aren't calling it... yet. 
+  // rremoved loading from const { loading, data } since we aren't calling it... yet.
   const { data } = useQuery(GET_ME);
 
   const client = useApolloClient();
@@ -78,7 +78,7 @@ const SearchRecipes = () => {
     // console.log(background);
 
     setSearchedRecipes(data.getRecipe);
-    console.log(searchedRecipes[0].name)
+    console.log(searchedRecipes[0].name);
   };
 
   // create function to handle saving a book to our database
@@ -116,36 +116,40 @@ const SearchRecipes = () => {
 
   return (
     <>
-      <Jumbotron fluid className="text-light bg-dark jumbo" >
-          <Container>
-            <h1>Search for Recipes!</h1>
-            <Form onSubmit={handleFormSubmit}>
-              <Form.Row>
-                <Col xs={12} md={8}>
-                  <Form.Control
-                    name="searchInput"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    type="text"
-                    size="lg"
-                    placeholder="Search for a recipe by ingredients"
-                  />
-                </Col>
-                <Col xs={12} md={4}>
-                  <Button type="submit" variant="success" size="lg">
-                    Submit Search
-                  </Button>
-                </Col>
-              </Form.Row>
-            </Form>
-          </Container>
+      <Jumbotron fluid className="text-light bg-dark jumbo">
+        <Container>
+          <h1>Search for Recipes!</h1>
+          <Form onSubmit={handleFormSubmit}>
+            <Form.Row>
+              <Col xs={12} md={8}>
+                <Form.Control
+                  name="searchInput"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  type="text"
+                  size="lg"
+                  placeholder="Search for a recipe by ingredients"
+                />
+              </Col>
+              <Col xs={12} md={4}>
+                <Button type="submit" variant="success" size="lg">
+                  Submit Search
+                </Button>
+              </Col>
+            </Form.Row>
+          </Form>
+        </Container>
       </Jumbotron>
-      <div className='wrap' style={backgroundPic}>
+      {searchedRecipes.length ? (
+        <Container>`Viewing ${searchedRecipes.length} results:`</Container>
+      ) : (
+        <Mosaic />
+      )}
       <Container>
         <h2>
           {searchedRecipes.length
             ? `Viewing ${searchedRecipes.length} results:`
-            : "Search for a recipe to begin"}
+            : null}
         </h2>
         <CardColumns>
           {searchedRecipes.map((recipe) => {
@@ -171,13 +175,14 @@ const SearchRecipes = () => {
                   <Card.Title>{recipe.name}</Card.Title>
                   {/* <p className='small'>Authors: {book.authors}</p> */}
                   <Card.Text>{recipe.description}</Card.Text>
-                  <Button 
-                  className='btn-block btn- border-dark' 
-                  variant='light'                
-                  onClick={() => {
-                  setRecipe(recipe);
-                  setShowModal(true);
-                }}>
+                  <Button
+                    className="btn-block btn- border-dark"
+                    variant="light"
+                    onClick={() => {
+                      setRecipe(recipe);
+                      setShowModal(true);
+                    }}
+                  >
                     View this Recipe!
                   </Button>
                   {Auth.loggedIn() && (
@@ -201,7 +206,6 @@ const SearchRecipes = () => {
           })}
         </CardColumns>
       </Container>
-      </div>
       {/* set modal data up */}
       <Modal
         size="xl"
@@ -219,41 +223,53 @@ const SearchRecipes = () => {
         <Modal.Body>
           <Row>
             <Col xs={12} md={3}>
-            {recipe.thumbnail_url ? (
-              <Image
-                src={recipe.thumbnail_url}
-                alt={`The thumbnail image for ${recipe.name}`}
-                fluid
-              />
-            ) : null}
+              {recipe.thumbnail_url ? (
+                <Image
+                  src={recipe.thumbnail_url}
+                  alt={`The thumbnail image for ${recipe.name}`}
+                  fluid
+                />
+              ) : null}
             </Col>
             <Col xs={12} md={3}>
-                  <h4>Ingredients</h4>
-                  <ListGroup variant="flush">
-                    {recipe.ingredients &&
-                      recipe.ingredients.map((ingredient, index) => {
-                        const arraySearch = searchInput.split(' ');
-                        const isPresent = arraySearch.reduce((is, word) => is || ingredient.includes(word), false);
-                        if (isPresent) {
-                          return <ListGroup.Item variant="success" key={index}>{ingredient}</ListGroup.Item>;  
-                        } else {
-                          return <ListGroup.Item key={index}>{ingredient}</ListGroup.Item>;
-                        }
-                      })}
-                  </ListGroup>
+              <h4>Ingredients</h4>
+              <ListGroup variant="flush">
+                {recipe.ingredients &&
+                  recipe.ingredients.map((ingredient, index) => {
+                    const arraySearch = searchInput.split(" ");
+                    const isPresent = arraySearch.reduce(
+                      (is, word) => is || ingredient.includes(word),
+                      false
+                    );
+                    if (isPresent) {
+                      return (
+                        <ListGroup.Item variant="success" key={index}>
+                          {ingredient}
+                        </ListGroup.Item>
+                      );
+                    } else {
+                      return (
+                        <ListGroup.Item key={index}>
+                          {ingredient}
+                        </ListGroup.Item>
+                      );
+                    }
+                  })}
+              </ListGroup>
             </Col>
             <Col xs={12} md={6}>
               <h4>Directions</h4>
               <ListGroup variant="flush">
                 {recipe.directions &&
                   recipe.directions.map((direction, index) => {
-                    return <ListGroup.Item key={index}>{direction}</ListGroup.Item>;
+                    return (
+                      <ListGroup.Item key={index}>{direction}</ListGroup.Item>
+                    );
                   })}
               </ListGroup>
             </Col>
           </Row>
-          <Container handleModalClose={() => setShowModal(false)}>
-          </Container>
+          <Container handleModalClose={() => setShowModal(false)}></Container>
         </Modal.Body>
       </Modal>
     </>
