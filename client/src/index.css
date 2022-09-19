@@ -25,10 +25,11 @@ code {
 }
 
 .mosaic-container {
-  width: 150vh;
-  height: 100vh;
+  width: 200vh;
+  height: 69vh;
   padding-left: 0px;
   overflow-y: hidden;
+  margin: 0;
 }
 
 .mosaic-image {
@@ -40,7 +41,7 @@ code {
 
 .mosaic-row {
   height: 200px;
-  margin: 1px;
+  margin: 0px;
   flex-wrap: wrap;
 }
 
