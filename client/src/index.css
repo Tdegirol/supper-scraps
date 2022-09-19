@@ -26,7 +26,7 @@ code {
 
 .mosaic-container {
   width: 250vh;
-  height: 69vh;
+  height: 70vh;
   padding-left: 0px;
   overflow-y: hidden;
   margin: 0;
@@ -63,6 +63,7 @@ code {
 
 .jumbo {
   margin-bottom: 0;
+  padding-top: 3vw;
 }
 
 html {

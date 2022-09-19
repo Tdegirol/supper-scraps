@@ -30,7 +30,7 @@ const AppNavbar = () => {
                     See Your Recipes
                   </Nav.Link>
                   <Nav.Link as={Link} to='/'>
-                    Inspiration
+                  Inspiration
                   </Nav.Link>
                   <Nav.Link onClick={Auth.logout}>Logout</Nav.Link>
                 </>
