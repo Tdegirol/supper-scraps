@@ -38,12 +38,14 @@ function App() {
       <Router>
         <>
           <Navbar />
+          <div className="content-container"> 
           <Routes>
             <Route exact path="/" element={<SearchRecipes />} />
             <Route exact path="/saved" element={<SavedRecipes />} />
             <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
           </Routes>
-          <Footer />
+          </div>
+          <Footer className="footer--pin"/>
         </>
       </Router>
     </ApolloProvider>
