@@ -30,3 +30,27 @@ export const GET_RECIPES = gql`
     }
   }
 `
+export const GET_DINNER_INSP = gql`
+  query getDinnerInsp($dinnerArr: [String]) {
+    getDinnerInsp(dinnerArr: $dinnerArr) {
+      name
+      id
+      description
+      thumbnail_url
+      ingredients
+      directions
+    }
+  }
+`
+  export const GET_DESSERT_INSP = gql`
+  query getDessertInsp($dessertArr: String!) {
+    getDessertInsp(dessertArr: $dessertArr) {
+      name
+      id
+      description
+      thumbnail_url
+      ingredients
+      directions
+    }
+  }
+`

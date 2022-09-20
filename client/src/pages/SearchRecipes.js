@@ -141,7 +141,7 @@ const SearchRecipes = () => {
         </Container>
       </Jumbotron>
       {searchedRecipes.length ? (
-        <Container>`Viewing ${searchedRecipes.length} results:`</Container>
+        <Container></Container>
       ) : (
         <Mosaic />
       )}
