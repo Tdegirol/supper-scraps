@@ -19,6 +19,8 @@ const InspRecipes = () => {
   const [searchInput, setSearchInput] = useState("");
   // set modal display state
   const [showModal, setShowModal] = useState(false);
+  // error state variable
+  const [error, setError] = useState("");
   // create state to hold saved recipeId values
   // this is used to utilize useEffect hook to save savedRecipeIds to local storage.
   // We aren't using local storage - would just use for MongoDB?

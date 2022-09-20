@@ -35,6 +35,9 @@ const SearchRecipes = () => {
   const [searchInput, setSearchInput] = useState("");
   // set modal display state
   const [showModal, setShowModal] = useState(false);
+  // error state variable
+  const [error, setError] = useState("");
+
   // create state to hold saved recipeId values
   // this is used to utilize useEffect hook to save savedRecipeIds to local storage.
   // We aren't using local storage - would just use for MongoDB?
@@ -76,9 +79,12 @@ const SearchRecipes = () => {
     //   return(pics.thumbnail_url)
     // })
     // console.log(background);
-
-    setSearchedRecipes(data.getRecipe);
-    console.log(searchedRecipes[0].name);
+    if (data.getRecipe.length === 0) {
+      setError('No results - try entering fewer ingredients or check your spelling')
+    } else {
+      setSearchedRecipes(data.getRecipe);
+      setError('');
+    }
   };
 
   // create function to handle saving a book to our database
@@ -130,6 +136,7 @@ const SearchRecipes = () => {
                   size="lg"
                   placeholder="Search for a recipe by ingredients"
                 />
+                <h4>{error}</h4>
               </Col>
               <Col xs={12} md={4}>
                 <Button type="submit" variant="success" size="lg">
