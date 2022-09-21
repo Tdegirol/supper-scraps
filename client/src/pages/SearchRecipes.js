@@ -79,12 +79,20 @@ const SearchRecipes = () => {
     //   return(pics.thumbnail_url)
     // })
     // console.log(background);
+    
     if (data.getRecipe.length === 0) {
       setError('No results - try entering fewer ingredients or check your spelling')
     } else {
+
+    //   const newRecipe = data.getRecipe.map((data) => {
+    //     return {...data, isMissing: data.ingredients.length - searchInput.split(' ').length }
+    //   })
       setSearchedRecipes(data.getRecipe);
       setError('');
-    }
+    };
+
+
+
   };
 
   // create function to handle saving a book to our database
@@ -180,8 +188,8 @@ const SearchRecipes = () => {
                 ) : null}
                 <Card.Body>
                   <Card.Title>{recipe.name}</Card.Title>
-                  {/* <p className='small'>Authors: {book.authors}</p> */}
                   <Card.Text>{recipe.description}</Card.Text>
+                  {/* <p>❗You're missing {recipe.isMissing} ingredients</p> */}
                   <Button
                     className="btn-block btn- border-dark"
                     variant="light"

@@ -109,6 +109,11 @@ const InspRecipes = () => {
               </Col>
         </Container>
       </Jumbotron>
+      {searchedRecipes.length ? (
+        <Container></Container>
+      ) : (
+        <Mosaic />
+      )}
       <Container>
         <h2>
           {searchedRecipes.length
