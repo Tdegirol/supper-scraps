@@ -46,6 +46,14 @@ code {
   padding: 1px;
 }
 
+.arrows{
+  opacity:100%
+}
+
+.arrows-disabled {
+  opacity: 25%
+}
+
 .wrap {
   display: flex;
   flex-direction: column;

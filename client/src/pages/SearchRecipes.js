@@ -142,7 +142,11 @@ const SearchRecipes = (props) => {
       <Container>
         <h2>
           {searchedRecipes.length
-            ? `Viewing ${searchedRecipes.length} results:`
+            ? <><h4><Image className="cp p-1 arrows-disabled" src={"/images/icons8-left.svg"} />
+            {`Viewing ${searchedRecipes.length} results:`}
+            <Image className="cp p-1 arrows-disabled" src={"/images/icons8-right.svg"} />
+            </h4></>
+            // {`Viewing ${searchedRecipes.length} results:`}
             : null}
         </h2>
         <CardColumns>
