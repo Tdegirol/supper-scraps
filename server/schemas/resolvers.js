@@ -7,7 +7,6 @@ require("dotenv").config();
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
-      console.log(`Me query ${context.user}`);
       if (context.user) {
         const username = context.user.username;
         const userData = await User.findOne({ username }).select(
@@ -47,7 +46,7 @@ const resolvers = {
         // response.ok?
         const data = await response.json();
         console.log(`Fetch to tasty API executed for ${ingredients}: results ${data.results.length}`);
-        const isMore = data.count > start;
+        const isMore = data.count > (page+1)*40;
         // Filter out non-recipes
         data.results = data.results.filter((result) =>
           result.canonical_id.includes("recipe")
