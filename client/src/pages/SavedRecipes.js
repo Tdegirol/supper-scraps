@@ -78,11 +78,14 @@ const SavedRecipes = () => {
                   <Card.Title>{recipe.name}</Card.Title>
                   {/* <p className='small'>Authors: {recipe.authors}</p> */}
                   <Card.Text>{recipe.description}</Card.Text>
-                  <Button className='btn-block btn-' variant='success'                
-                  onClick={() => {
-                  setRecipe(recipe);
-                  setShowModal(true);
-                }}>
+                  <Button
+                    className="btn-block btn- border-dark"
+                    variant="light"
+                    onClick={() => {
+                      setRecipe(recipe);
+                      setShowModal(true);
+                    }}
+                  >
                     View this Recipe!
                   </Button>
                   <Button className='btn-block btn-danger' onClick={() => handleDeleteRecipes(recipe.id)}>

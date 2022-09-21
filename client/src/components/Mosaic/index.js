@@ -1,4 +1,4 @@
-import { React, useRef } from "react";
+import { React } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 // import pics from "../../utils/pics";
 

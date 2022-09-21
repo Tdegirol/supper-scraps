@@ -1,32 +1,16 @@
-import React, { useState } from "react";
-import { useQuery, useMutation, useApolloClient } from "@apollo/client";
-import { SAVE_RECIPE } from "../utils/mutations";
-import { GET_RECIPES, GET_ME } from "../utils/queries";
-import {
-  Jumbotron,
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  Card,
-  CardColumns,
-  Modal,
-  ListGroup,
-  // Grid,
-  // Spinner,
-  Image,
-} from "react-bootstrap";
+import React, { useState } from 'react';
+import { Jumbotron, Container, CardColumns, Card, Form, Modal, Button, Row, Col, Image, ListGroup } from 'react-bootstrap';
+import { GET_DINNER_INSP, GET_DESSERT_INSP, GET_ME } from "../utils/queries"
+import { REMOVE_RECIPE, SAVE_RECIPE } from '../utils/mutations';
+import Auth from '../utils/auth';
 import Mosaic from '../components/Mosaic';
+// import { removeRecipeId } from '../utils/localStorage';
+import { useQuery, useMutation, useApolloClient } from "@apollo/client";
 
-import Auth from "../utils/auth";
-// const backgroundArr = require("../utils/pics");
-// const backgroundPic = {
-//   backgroundImage: `url(${backgroundArr[0]})`,
-//   backgroundSize: "contain",
-// };
+const dinnerArr = ['chicken', 'beef', 'fish']
+const dessertArr = 'sugar chocolate'
 
-const SearchRecipes = () => {
+const InspRecipes = () => {
   // create state for holding returned graphql data
   const [searchedRecipes, setSearchedRecipes] = useState([]);
   // create state for holding clicked recipe
@@ -37,7 +21,6 @@ const SearchRecipes = () => {
   const [showModal, setShowModal] = useState(false);
   // error state variable
   const [error, setError] = useState("");
-
   // create state to hold saved recipeId values
   // this is used to utilize useEffect hook to save savedRecipeIds to local storage.
   // We aren't using local storage - would just use for MongoDB?
@@ -61,40 +44,23 @@ const SearchRecipes = () => {
   // }
 
   // create method to search for recipes and set state on form submit
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!searchInput) {
-      return false;
-    }
-
-    // graphql query
+  const handleFormSubmitDessert = async (event) => {
+    event.preventDefault();   
     const { data } = await client.query({
-      query: GET_RECIPES,
-      variables: { ingredients: searchInput },
+      query: GET_DESSERT_INSP,
+      variables: { dessertArr: dessertArr },
     });
-
-    // console.log(data.getRecipe);
-    // const background = data.getRecipe.map(pics => {
-    //   return(pics.thumbnail_url)
-    // })
-    // console.log(background);
-    
-    if (data.getRecipe.length === 0) {
-      setError('No results - try entering fewer ingredients or check your spelling')
-    } else {
-
-    //   const newRecipe = data.getRecipe.map((data) => {
-    //     return {...data, isMissing: data.ingredients.length - searchInput.split(' ').length }
-    //   })
-      setSearchedRecipes(data.getRecipe);
-      setError('');
-    };
-
-
-
+    setSearchedRecipes(data.getDessertInsp);
   };
 
+  const handleFormSubmitDinner = async (event) => {
+    event.preventDefault();    
+    const { data } = await client.query({
+      query: GET_DINNER_INSP,
+      variables: { dinnerArr: dinnerArr },
+    });
+    setSearchedRecipes(data.getDinnerInsp);
+  };
   // create function to handle saving a book to our database
   const handleSaveRecipe = async (recipe) => {
     // get token
@@ -132,27 +98,15 @@ const SearchRecipes = () => {
     <>
       <Jumbotron fluid className="text-light bg-dark jumbo">
         <Container>
-          <h1>What's in your fridge?</h1>
-          <Form onSubmit={handleFormSubmit}>
-            <Form.Row>
-              <Col xs={12} md={8}>
-                <Form.Control
-                  name="searchInput"
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  type="text"
-                  size="lg"
-                  placeholder="Search for a recipe by ingredients"
-                />
-                <h4>{error}</h4>
-              </Col>
+          <h1>Need some inspirations?</h1>
               <Col xs={12} md={4}>
-                <Button type="submit" variant="success" size="lg">
-                  Submit Search
+                <Button type="submit" variant="success" size="lg" className='my-2' onClick={handleFormSubmitDessert}>
+                  Find Dessert Recipes!
+                </Button>
+                <Button type="submit" variant="success" size="lg" onClick={handleFormSubmitDinner}>
+                  Find Dinner Recipes!
                 </Button>
               </Col>
-            </Form.Row>
-          </Form>
         </Container>
       </Jumbotron>
       {searchedRecipes.length ? (
@@ -173,11 +127,6 @@ const SearchRecipes = () => {
                 key={recipe.id}
                 border="dark"
                 className="cp"
-                // removed and put into button functionality
-                // onClick={() => {
-                //   setRecipe(recipe);
-                //   setShowModal(true);
-                // }}
               >
                 {recipe.thumbnail_url ? (
                   <Card.Img
@@ -188,8 +137,8 @@ const SearchRecipes = () => {
                 ) : null}
                 <Card.Body>
                   <Card.Title>{recipe.name}</Card.Title>
+                  {/* <p className='small'>Authors: {book.authors}</p> */}
                   <Card.Text>{recipe.description}</Card.Text>
-                  {/* <p>❗You're missing {recipe.isMissing} ingredients</p> */}
                   <Button
                     className="btn-block btn- border-dark"
                     variant="light"
@@ -291,4 +240,4 @@ const SearchRecipes = () => {
   );
 };
 
-export default SearchRecipes;
+export default InspRecipes;

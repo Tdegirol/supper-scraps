@@ -30,6 +30,8 @@ const typeDefs = gql`
     getSingleUser(username: String!): User
     getUser: [User]
     getRecipe(ingredients: String!): [Recipe]
+    getDinnerInsp(dinnerArr: [String]): [Recipe]
+    getDessertInsp(dessertArr: String!): [Recipe]
   }
 
   type Mutation {
