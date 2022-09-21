@@ -18,6 +18,7 @@ const typeDefs = gql`
     email: String
     password: String
     savedRecipes: [Recipe]
+    savedRecipeIds: [Int]
   }
 
   type Auth {

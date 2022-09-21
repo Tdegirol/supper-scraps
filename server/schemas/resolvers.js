@@ -7,6 +7,7 @@ require("dotenv").config();
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
+      console.log(`Me query ${context.user}`);
       if (context.user) {
         const username = context.user.username;
         const userData = await User.findOne({ username }).select(

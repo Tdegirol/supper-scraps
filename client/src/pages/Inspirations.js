@@ -61,7 +61,7 @@ const InspRecipes = () => {
     });
     setSearchedRecipes(data.getDinnerInsp);
   };
-  // create function to handle saving a book to our database
+  // create function to handle saving a recipe to our database
   const handleSaveRecipe = async (recipe) => {
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -137,7 +137,6 @@ const InspRecipes = () => {
                 ) : null}
                 <Card.Body>
                   <Card.Title>{recipe.name}</Card.Title>
-                  {/* <p className='small'>Authors: {book.authors}</p> */}
                   <Card.Text>{recipe.description}</Card.Text>
                   <Button
                     className="btn-block btn- border-dark"

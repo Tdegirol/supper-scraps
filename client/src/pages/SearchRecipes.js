@@ -26,39 +26,26 @@ import Auth from "../utils/auth";
 //   backgroundSize: "contain",
 // };
 
-const SearchRecipes = () => {
-  // create state for holding returned graphql data
-  const [searchedRecipes, setSearchedRecipes] = useState([]);
+const SearchRecipes = (props) => {
+  // deconstruct state variables from props
+  const { searchInput, setSearchInput, searchedRecipes, setSearchedRecipes } = props.value;
   // create state for holding clicked recipe
   const [recipe, setRecipe] = useState({});
-  // create state for holding our search field data
-  const [searchInput, setSearchInput] = useState("");
   // set modal display state
   const [showModal, setShowModal] = useState(false);
   // error state variable
   const [error, setError] = useState("");
 
-  // create state to hold saved recipeId values
-  // this is used to utilize useEffect hook to save savedRecipeIds to local storage.
-  // We aren't using local storage - would just use for MongoDB?
-  // ******* const [savedRecipeIds, setSavedRecipeIds] = useState(getSavedRecipeIds());
-
   // save recipe using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
-  // rremoved loading from const { loading, data } since we aren't calling it... yet.
+
+  // removed loading from const { loading, data } since we aren't calling it... yet.
   const { data } = useQuery(GET_ME);
 
   const client = useApolloClient();
 
+  // Check if logged in
   const user = data?.me;
-  // if (!user?.username) {
-  //   return (
-  //     <h4>
-  //       You need to be logged in to see this page. Use the navigation links
-  //       above to sign up or log in!
-  //     </h4>
-  //   );
-  // }
 
   // create method to search for recipes and set state on form submit
   const handleFormSubmit = async (event) => {
@@ -74,12 +61,6 @@ const SearchRecipes = () => {
       variables: { ingredients: searchInput },
     });
 
-    // console.log(data.getRecipe);
-    // const background = data.getRecipe.map(pics => {
-    //   return(pics.thumbnail_url)
-    // })
-    // console.log(background);
-    
     if (data.getRecipe.length === 0) {
       setError('No results - try entering fewer ingredients or check your spelling')
     } else {
@@ -91,13 +72,11 @@ const SearchRecipes = () => {
       setError('');
     };
 
-
-
   };
 
-  // create function to handle saving a book to our database
+  // create function to handle saving a recipe to our database
   const handleSaveRecipe = async (recipe) => {
-    // get token
+    // get token - only save if user is logged in
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -143,7 +122,7 @@ const SearchRecipes = () => {
                   type="text"
                   size="lg"
                   placeholder="Search for a recipe by ingredients"
-                />
+                />                
                 <h4>{error}</h4>
               </Col>
               <Col xs={12} md={4}>
