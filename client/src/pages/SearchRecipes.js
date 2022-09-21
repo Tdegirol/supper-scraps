@@ -17,7 +17,7 @@ import {
   // Spinner,
   Image,
 } from "react-bootstrap";
-import Mosaic from '../components/Mosaic';
+import Mosaic from "../components/Mosaic";
 
 import Auth from "../utils/auth";
 // const backgroundArr = require("../utils/pics");
@@ -28,7 +28,16 @@ import Auth from "../utils/auth";
 
 const SearchRecipes = (props) => {
   // deconstruct state variables from props
-  const { searchInput, setSearchInput, searchedRecipes, setSearchedRecipes } = props.value;
+  const {
+    searchInput,
+    setSearchInput,
+    searchedRecipes,
+    setSearchedRecipes,
+    isMore,
+    setIsMore,
+    page,
+    setPage,
+  } = props.value;
   // create state for holding clicked recipe
   const [recipe, setRecipe] = useState({});
   // set modal display state
@@ -58,20 +67,43 @@ const SearchRecipes = (props) => {
     // graphql query
     const { data } = await client.query({
       query: GET_RECIPES,
-      variables: { ingredients: searchInput },
+      variables: { ingredients: searchInput, page: 0 },
     });
 
-    if (data.getRecipe.length === 0) {
-      setError('No results - try entering fewer ingredients or check your spelling')
+    if (data.getRecipe.recipes.length === 0) {
+      setError(
+        "No results - try entering fewer ingredients or check your spelling"
+      );
     } else {
+      //   const newRecipe = data.getRecipe.map((data) => {
+      //     return {...data, isMissing: data.ingredients.length - searchInput.split(' ').length }
+      //   })
+      setSearchedRecipes(data.getRecipe.recipes);
+      console.log(data.getRecipe.isMore);
+      setIsMore(data.getRecipe.isMore);
+      setPage(0);
+      setError("");
+    }
+  };
 
-    //   const newRecipe = data.getRecipe.map((data) => {
-    //     return {...data, isMissing: data.ingredients.length - searchInput.split(' ').length }
-    //   })
-      setSearchedRecipes(data.getRecipe);
-      setError('');
-    };
+  const handlePageNext = async (event) => {
+    const { data } = await client.query({
+      query: GET_RECIPES,
+      variables: { ingredients: searchInput, page: page + 1 },
+    });
+    setSearchedRecipes(data.getRecipe.recipes);
+    setPage(page + 1);
+  };
 
+  const handlePagePrevious = async (event) => {
+    if (page > 0) {
+      const { data } = await client.query({
+        query: GET_RECIPES,
+        variables: { ingredients: searchInput, page: page - 1 },
+      });
+      setSearchedRecipes(data.getRecipe.recipes);
+      setPage(page - 1);
+    }
   };
 
   // create function to handle saving a recipe to our database
@@ -122,7 +154,7 @@ const SearchRecipes = (props) => {
                   type="text"
                   size="lg"
                   placeholder="Search for a recipe by ingredients"
-                />                
+                />
                 <h4>{error}</h4>
               </Col>
               <Col xs={12} md={4}>
@@ -134,21 +166,35 @@ const SearchRecipes = (props) => {
           </Form>
         </Container>
       </Jumbotron>
-      {searchedRecipes.length ? (
-        <Container></Container>
-      ) : (
-        <Mosaic />
-      )}
+      {searchedRecipes.length ? <Container></Container> : <Mosaic />}
       <Container>
-        <h2>
-          {searchedRecipes.length
-            ? <><h4><Image className="cp p-1 arrows-disabled" src={"/images/icons8-left.svg"} />
-            {`Viewing ${searchedRecipes.length} results:`}
-            <Image className="cp p-1 arrows-disabled" src={"/images/icons8-right.svg"} />
-            </h4></>
-            // {`Viewing ${searchedRecipes.length} results:`}
-            : null}
-        </h2>
+        {searchedRecipes.length ? (
+          <>
+            <h4>
+              {page > 1 ? (
+                <Image className="cp p-1" src={"/images/icons8-left.svg"} onClick={handlePagePrevious} />
+              ) : (
+                <Image
+                  className="p-1 arrows-disabled"
+                  src={"/images/icons8-left.svg"}
+                />
+              )}
+              {`Viewing ${searchedRecipes.length} results:`}
+              {isMore ? (
+                <Image
+                  className="cp p-1"
+                  src={"/images/icons8-right.svg"}
+                  onClick={handlePageNext}
+                />
+              ) : (
+                <Image
+                  className="p-1 arrows-disabled"
+                  src={"/images/icons8-right.svg"}
+                />
+              )}
+            </h4>
+          </>
+        ) : null}
         <CardColumns>
           {searchedRecipes.map((recipe) => {
             return (

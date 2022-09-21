@@ -12,6 +12,11 @@ const typeDefs = gql`
     directions: [String]
   }
 
+  type Recipes {
+    recipes: [Recipe]
+    isMore: Boolean
+  }
+
   type User {
     _id: ID
     username: String
@@ -30,7 +35,7 @@ const typeDefs = gql`
     me: User
     getSingleUser(username: String!): User
     getUser: [User]
-    getRecipe(ingredients: String!): [Recipe]
+    getRecipe(ingredients: String!, page: Int): Recipes
     getDinnerInsp(dinnerArr: [String]): [Recipe]
     getDessertInsp(dessertArr: String!): [Recipe]
   }
