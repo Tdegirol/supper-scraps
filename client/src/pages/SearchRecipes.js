@@ -27,7 +27,7 @@ const SearchRecipes = (props) => {
     searchedRecipes,
     setSearchedRecipes,
     isMore,
-    setIsMore,
+    // setIsMore,
     page,
     setPage,
   } = props.value;
@@ -69,8 +69,8 @@ const SearchRecipes = (props) => {
       //     return {...data, isMissing: data.ingredients.length - searchInput.split(' ').length }
       //   })
       setSearchedRecipes(data.getRecipe.recipes);
-      console.log(data.getRecipe.isMore);
-      setIsMore(data.getRecipe.isMore);
+      // console.log(data.getRecipe.isMore);
+      // setIsMore(data.getRecipe.isMore);
       setPage(0);
       setError("");
     }
@@ -184,11 +184,6 @@ const SearchRecipes = (props) => {
                 key={recipe.id}
                 border="dark"
                 className="cp"
-                // removed and put into button functionality
-                // onClick={() => {
-                //   setRecipe(recipe);
-                //   setShowModal(true);
-                // }}
               >
                 {recipe.thumbnail_url ? (
                   <Card.Img

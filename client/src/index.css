@@ -64,6 +64,7 @@ code {
 
 .jumbo {
   margin-bottom: 0;
+  padding: 40px;
 }
 
 html {
@@ -81,3 +82,7 @@ html {
   left: 0;
   bottom: 0;
 }
+
+/* .inspirations {
+  margin-bottom: 4vw;
+} */

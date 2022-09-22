@@ -3,14 +3,12 @@ import { Jumbotron, Container, CardColumns, Card, Modal, Button, Row, Col, Image
 import { GET_ME } from "../utils/queries"
 import { REMOVE_RECIPE } from '../utils/mutations';
 import Auth from '../utils/auth';
-// import { removeRecipeId } from '../utils/localStorage';
 import { useQuery, useMutation } from "@apollo/client";
 
 
 const SavedRecipes = () => {
   const { loading, data } = useQuery(GET_ME);
   let userData = data?.me || {};
-  // removed error from [removeRecipe, {error}] since we don't call it.
   const [removeRecipe] = useMutation(REMOVE_RECIPE);
   console.log(userData);
   const [recipe, setRecipe] = useState({});
@@ -49,9 +47,7 @@ const SavedRecipes = () => {
           <h1>Viewing saved Recipes!</h1>
         </Container>
       </Jumbotron>
-      {/* added another div- don't know if needed, but if want to set background */}
       <div className='wrap' 
-      // style={backgroundPic}
       >
       <Container>
         <h2>
