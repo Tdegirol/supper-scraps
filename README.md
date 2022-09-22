@@ -1,87 +1,49 @@
-# Getting Started with Create React App
+# Supper Scraps
 
-AS AN avid cooker and personal chef
-I WANT to use an app that can offer recipe options and creations based on the ingredients I already have
-SO THAT I can cook a meal without having to run out to the store
-GIVEN a single-page application for virtually any user
-WHEN I load the page
-THEN I am prompted to create an account or sign in
-WHEN I view the homepage
-THEN I am presented with a header consisting of these sections: Home, My Dashboard, Inspirations, Logout
-WHEN I view the Home page (for any user, guest or member to use)
-THEN I am given an input field to enter ingredients that I have one at a time
-WHEN I view My Dashboard (account members only)
-THEN I am shown my previous recipe options
-WHEN I view Inspirations
-THEN I am presented with random options of recipes from the database(or API)
-WHEN I Logout
-THEN my account is signed out
+  ## Table of Contents
+  - [Description](#description)
+  - [User-Story](#userStory)
+  - [Installation](#install)
+  - [Usage](#usage)
+  - [Questions](#questions)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+  <a id="description"></a>
+  ## Description
+  This app allows users to log in and search ingredients that they have on hand (or would like to cook with). Then the app returns several recipes that include those ingredients with the option to save each recipe to the user's dashboard. This also offers an inspirations page which will offer some random recipes to try out!
+  
+  <a id="userStory"></a>
+  ## User Story
+    AS AN avid cooker and personal chef
+    I WANT to use an app that can offer recipe options and creations based on the ingredients I already have
+    SO THAT I can cook a meal without having to run out to the store
+    GIVEN a single-page application for virtually any user
+    WHEN I load the page
+    THEN I am prompted to create an account or sign in
+    WHEN I view the homepage
+    THEN I am presented with a header consisting of these sections: Home, My Dashboard, Inspirations, Logout
+    WHEN I view the Home page (for any user, guest or member to use)
+    THEN I am given an input field to enter ingredients that I have one at a time
+    WHEN I view My Dashboard (account members only)
+    THEN I am shown my previous recipe options
+    WHEN I view Inspirations
+    THEN I am presented with random options of recipes from the database(or API)
+    WHEN I Logout
+    THEN my account is signed out
 
-In the project directory, you can run:
+  <a id="install"></a>
+  ## Installation 
+  npm i
 
-### `npm start`
+  <a id="usage"></a>
+  ## Usage 
+  This app applies: React, GraphQL, Mongoose, MongoDB, React-Boostrap
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+  Visit the website on heroku at:
+  https://young-shelf-43673.herokuapp.com/
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  
+  <a id="questions"></a>
+  ## Questions 
+  - Github: [travisramcharran](https://github.com/travisramcharran/recipe-gen)
+  - Email: tdegirol@github.com
