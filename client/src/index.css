@@ -30,14 +30,7 @@ code {
   padding-left: 0px;
   padding-right: 0px;
   overflow-y: hidden;
-<<<<<<< HEAD
-  margin: 0;
-}
-
-.mosaic-image {
-=======
   margin-bottom: 0px;
->>>>>>> main
 }
 
 .mosaic-row {
@@ -53,6 +46,14 @@ code {
   padding: 1px;
 }
 
+.arrows{
+  opacity:100%
+}
+
+.arrows-disabled {
+  opacity: 25%
+}
+
 .wrap {
   display: flex;
   flex-direction: column;
@@ -63,7 +64,7 @@ code {
 
 .jumbo {
   margin-bottom: 0;
-  padding-top: 3vw;
+  padding: 40px;
 }
 
 html {
@@ -80,4 +81,13 @@ html {
   position: relative;
   left: 0;
   bottom: 0;
+}
+
+/* .inspirations {
+  margin-bottom: 4vw;
+} */
+
+.footer-button {
+  border: none;
+  
 }

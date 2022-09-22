@@ -14,19 +14,23 @@ export const GET_ME = gql`
         ingredients
         directions
       }
+      savedRecipeIds
     }
   }
 `;
 
 export const GET_RECIPES = gql`
-  query getRecipe($ingredients: String!) {
-    getRecipe(ingredients: $ingredients) {
-      name
-      id
-      description
-      thumbnail_url
-      ingredients
-      directions
+  query getRecipe($ingredients: String!, $page: Int) {
+    getRecipe(ingredients: $ingredients, page: $page) {
+      recipes {
+        name
+        id
+        description
+        thumbnail_url
+        ingredients
+        directions
+      }
+      isMore
     }
   }
 `

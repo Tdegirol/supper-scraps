@@ -28,12 +28,14 @@ const resolvers = {
       );
       return userData;
     },
-    getRecipe: async (parent, { ingredients }) => {
+    getRecipe: async (parent, { ingredients, page }) => {
       let recipes = [RecipeSchema];
+      if (!page) page=0;
+      const start = page*40;
       try {
         // synchronous fetch - takes upwards of 2 seconds
         const response = await fetch(
-          `https://tasty.p.rapidapi.com/recipes/list?from=0&size=40&q=${ingredients}`,
+          `https://tasty.p.rapidapi.com/recipes/list?from=${start}&size=40&q=${ingredients}`,
           {
             headers: {
               "X-RapidAPI-Key": process.env.API_KEY,
@@ -44,6 +46,7 @@ const resolvers = {
         // response.ok?
         const data = await response.json();
         console.log(`Fetch to tasty API executed for ${ingredients}: results ${data.results.length}`);
+        const isMore = data.count > (page+1)*40;
         // Filter out non-recipes
         data.results = data.results.filter((result) =>
           result.canonical_id.includes("recipe")
@@ -77,7 +80,7 @@ const resolvers = {
           }
         );
         recipes = data.results;
-        return recipes;
+        return { recipes: recipes, isMore };
       } catch (err) {
         console.log(err);
         return;

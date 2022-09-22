@@ -5,14 +5,13 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import React from "react";
+import { React, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SearchRecipes from "./pages/SearchRecipes";
 import SavedRecipes from "./pages/SavedRecipes";
 import Inspirations from "./pages/Inspirations";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-
 
 const httpLink = createHttpLink({
   uri: "/graphql",
@@ -34,21 +33,49 @@ const client = new ApolloClient({
 });
 
 function App() {
+  // create state for holding returned graphql data
+  const [searchedRecipes, setSearchedRecipes] = useState([]);
+  // create state for holding our search field data
+  const [searchInput, setSearchInput] = useState("");
+  // create state for page number
+  const [page, setPage] = useState(0);
+  // if there are more recipes to show
+  const [isMore, setIsMore] = useState(false);
+
   return (
     <ApolloProvider client={client}>
       <Router>
         <>
           <Navbar />
-          <div className="content-container"> 
-          <Routes>
-            <Route exact path="/" element={<SearchRecipes />} />
-            <Route exact path="/saved" element={<SavedRecipes />} />
-            <Route exact path="/inspirations" element={<Inspirations />} />
+          <div className="content-container">
+            <Routes>
+              <Route
+                exact
+                path="/"
+                element={
+                  <SearchRecipes
+                    value={{
+                      searchInput,
+                      setSearchInput,
+                      searchedRecipes,
+                      setSearchedRecipes,
+                      isMore,
+                      setIsMore,
+                      page,
+                      setPage
+                    }}
+                  />
+                }
+              />
+              <Route exact path="/saved" element={<SavedRecipes />} />
+              <Route exact path="/inspirations" element={<Inspirations />} />
 
-            <Route render={() => <h1 className="display-2">Wrong page!</h1>} />
-          </Routes>
+              <Route
+                render={() => <h1 className="display-2">Wrong page!</h1>}
+              />
+            </Routes>
           </div>
-          <Footer className="footer--pin"/>
+          <Footer className="footer--pin" />
         </>
       </Router>
     </ApolloProvider>

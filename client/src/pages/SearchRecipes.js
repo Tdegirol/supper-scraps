@@ -13,52 +13,38 @@ import {
   CardColumns,
   Modal,
   ListGroup,
-  // Grid,
-  // Spinner,
   Image,
 } from "react-bootstrap";
-import Mosaic from '../components/Mosaic';
+import Mosaic from "../components/Mosaic";
 
 import Auth from "../utils/auth";
-// const backgroundArr = require("../utils/pics");
-// const backgroundPic = {
-//   backgroundImage: `url(${backgroundArr[0]})`,
-//   backgroundSize: "contain",
-// };
 
-const SearchRecipes = () => {
-  // create state for holding returned graphql data
-  const [searchedRecipes, setSearchedRecipes] = useState([]);
+const SearchRecipes = (props) => {
+  // deconstruct state variables from props
+  const {
+    searchInput,
+    setSearchInput,
+    searchedRecipes,
+    setSearchedRecipes,
+    isMore,
+    // setIsMore,
+    page,
+    setPage,
+  } = props.value;
   // create state for holding clicked recipe
   const [recipe, setRecipe] = useState({});
-  // create state for holding our search field data
-  const [searchInput, setSearchInput] = useState("");
   // set modal display state
   const [showModal, setShowModal] = useState(false);
   // error state variable
   const [error, setError] = useState("");
-
-  // create state to hold saved recipeId values
-  // this is used to utilize useEffect hook to save savedRecipeIds to local storage.
-  // We aren't using local storage - would just use for MongoDB?
-  // ******* const [savedRecipeIds, setSavedRecipeIds] = useState(getSavedRecipeIds());
-
   // save recipe using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
-  // rremoved loading from const { loading, data } since we aren't calling it... yet.
+  // removed loading from const { loading, data } since we aren't calling it... yet.
+  const [savedRecipeIds, setSavedRecipeIds] = useState([]);
   const { data } = useQuery(GET_ME);
-
   const client = useApolloClient();
-
+  // Check if logged in
   const user = data?.me;
-  // if (!user?.username) {
-  //   return (
-  //     <h4>
-  //       You need to be logged in to see this page. Use the navigation links
-  //       above to sign up or log in!
-  //     </h4>
-  //   );
-  // }
 
   // create method to search for recipes and set state on form submit
   const handleFormSubmit = async (event) => {
@@ -71,33 +57,50 @@ const SearchRecipes = () => {
     // graphql query
     const { data } = await client.query({
       query: GET_RECIPES,
-      variables: { ingredients: searchInput },
+      variables: { ingredients: searchInput, page: 0 },
     });
 
-    // console.log(data.getRecipe);
-    // const background = data.getRecipe.map(pics => {
-    //   return(pics.thumbnail_url)
-    // })
-    // console.log(background);
-    
-    if (data.getRecipe.length === 0) {
-      setError('No results - try entering fewer ingredients or check your spelling')
+    if (data.getRecipe.recipes.length === 0) {
+      setError(
+        "No results - try entering fewer ingredients or check your spelling"
+      );
     } else {
-
-    //   const newRecipe = data.getRecipe.map((data) => {
-    //     return {...data, isMissing: data.ingredients.length - searchInput.split(' ').length }
-    //   })
-      setSearchedRecipes(data.getRecipe);
-      setError('');
-    };
-
-
-
+      //   const newRecipe = data.getRecipe.map((data) => {
+      //     return {...data, isMissing: data.ingredients.length - searchInput.split(' ').length }
+      //   })
+      setSearchedRecipes(data.getRecipe.recipes);
+      // console.log(data.getRecipe.isMore);
+      // setIsMore(data.getRecipe.isMore);
+      setPage(0);
+      setError("");
+    }
   };
 
-  // create function to handle saving a book to our database
-  const handleSaveRecipe = async (recipe) => {
-    // get token
+  const handlePageNext = async (event) => {
+    const { data } = await client.query({
+      query: GET_RECIPES,
+      variables: { ingredients: searchInput, page: page + 1 },
+    });
+    setSearchedRecipes(data.getRecipe.recipes);
+    setPage(page + 1);
+  };
+
+  const handlePagePrevious = async (event) => {
+    if (page > 0) {
+      const { data } = await client.query({
+        query: GET_RECIPES,
+        variables: { ingredients: searchInput, page: page - 1 },
+      });
+      setSearchedRecipes(data.getRecipe.recipes);
+      setPage(page - 1);
+    }
+  };
+
+  // create function to handle saving a recipe to our database
+  const handleSaveRecipe = async (id) => {
+
+    const recipeToSave = searchedRecipes.find((recipe) => recipe.id === id);
+    // get token - only save if user is logged in
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -105,28 +108,18 @@ const SearchRecipes = () => {
     }
 
     try {
-      console.log(
-        recipe.name,
-        recipe.id,
-        recipe.description,
-        recipe.thumbnail_url,
-        recipe.ingredients,
-        recipe.directions
-      );
       await saveRecipe({
-        variables: {
-          name: recipe.name,
-          id: recipe.id,
-          description: recipe.description,
-          thumbnail_url: recipe.thumbnail_url,
-          ingredients: recipe.ingredients,
-          directions: recipe.directions,
-        },
-      });
+        variables: {...recipeToSave },
+      })
+     // if book successfully saves to user's account, save book id to state
+      setSavedRecipeIds([
+        ...savedRecipeIds, recipeToSave.id
+      ])
     } catch (err) {
       console.error(err);
     }
   };
+
 
   return (
     <>
@@ -155,17 +148,35 @@ const SearchRecipes = () => {
           </Form>
         </Container>
       </Jumbotron>
-      {searchedRecipes.length ? (
-        <Container></Container>
-      ) : (
-        <Mosaic />
-      )}
+      {searchedRecipes.length ? <Container></Container> : <Mosaic />}
       <Container>
-        <h2>
-          {searchedRecipes.length
-            ? `Viewing ${searchedRecipes.length} results:`
-            : null}
-        </h2>
+        {searchedRecipes.length ? (
+          <>
+            <h4>
+              {page > 1 ? (
+                <Image className="cp p-1" src={"/images/icons8-left.svg"} onClick={handlePagePrevious} />
+              ) : (
+                <Image
+                  className="p-1 arrows-disabled"
+                  src={"/images/icons8-left.svg"}
+                />
+              )}
+              {`Viewing ${searchedRecipes.length} results:`}
+              {isMore ? (
+                <Image
+                  className="cp p-1"
+                  src={"/images/icons8-right.svg"}
+                  onClick={handlePageNext}
+                />
+              ) : (
+                <Image
+                  className="p-1 arrows-disabled"
+                  src={"/images/icons8-right.svg"}
+                />
+              )}
+            </h4>
+          </>
+        ) : null}
         <CardColumns>
           {searchedRecipes.map((recipe) => {
             return (
@@ -173,11 +184,6 @@ const SearchRecipes = () => {
                 key={recipe.id}
                 border="dark"
                 className="cp"
-                // removed and put into button functionality
-                // onClick={() => {
-                //   setRecipe(recipe);
-                //   setShowModal(true);
-                // }}
               >
                 {recipe.thumbnail_url ? (
                   <Card.Img
@@ -202,13 +208,13 @@ const SearchRecipes = () => {
                   </Button>
                   {Auth.loggedIn() && (
                     <Button
-                      disabled={user.savedRecipeIds?.some(
+                      disabled={savedRecipeIds?.some(
                         (savedRecipeId) => savedRecipeId === recipe.id
                       )}
                       className="btn-block btn-info"
-                      onClick={() => handleSaveRecipe(recipe)}
+                      onClick={() => handleSaveRecipe(recipe.id)}
                     >
-                      {user.savedRecipeIds?.some(
+                      {savedRecipeIds?.some(
                         (savedRecipeId) => savedRecipeId === recipe.id
                       )
                         ? "This recipe has already been saved!"
