@@ -1,21 +1,24 @@
 import React from "react";
 import {Container, Row, Col } from 'react-bootstrap';
+import Economic from "../Economic";
+import Convenient from "../Convenient";
+import Environmental from "../Environmental";
 
 const Footer = () => {
   return (
     <div className="footer text-center text-light bg-dark">
       <div className="py-4">
-        <h3>Why Use This App</h3>
+        <h3>Why Use This App?</h3>
         <Container>
           <Row>
-          <Col className="my-4">
-            Spend less money
+          <Col className="my-2">
+          <Convenient />
           </Col>
-          <Col className="my-4">
-            Decrease greenhouse gases
+          <Col className="my-2">
+          <Economic />
           </Col>
-          <Col className="my-4">
-          Avoid the grocery store
+          <Col className="my-2">
+          <Environmental />
           </Col>
           </Row>
         </Container>
