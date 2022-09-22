@@ -13,18 +13,11 @@ import {
   CardColumns,
   Modal,
   ListGroup,
-  // Grid,
-  // Spinner,
   Image,
 } from "react-bootstrap";
 import Mosaic from "../components/Mosaic";
 
 import Auth from "../utils/auth";
-// const backgroundArr = require("../utils/pics");
-// const backgroundPic = {
-//   backgroundImage: `url(${backgroundArr[0]})`,
-//   backgroundSize: "contain",
-// };
 
 const SearchRecipes = (props) => {
   // deconstruct state variables from props
@@ -44,15 +37,12 @@ const SearchRecipes = (props) => {
   const [showModal, setShowModal] = useState(false);
   // error state variable
   const [error, setError] = useState("");
-
   // save recipe using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
-
   // removed loading from const { loading, data } since we aren't calling it... yet.
+  const [savedRecipeIds, setSavedRecipeIds] = useState([]);
   const { data } = useQuery(GET_ME);
-
   const client = useApolloClient();
-
   // Check if logged in
   const user = data?.me;
 
@@ -107,7 +97,9 @@ const SearchRecipes = (props) => {
   };
 
   // create function to handle saving a recipe to our database
-  const handleSaveRecipe = async (recipe) => {
+  const handleSaveRecipe = async (id) => {
+
+    const recipeToSave = searchedRecipes.find((recipe) => recipe.id === id);
     // get token - only save if user is logged in
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -116,28 +108,18 @@ const SearchRecipes = (props) => {
     }
 
     try {
-      console.log(
-        recipe.name,
-        recipe.id,
-        recipe.description,
-        recipe.thumbnail_url,
-        recipe.ingredients,
-        recipe.directions
-      );
       await saveRecipe({
-        variables: {
-          name: recipe.name,
-          id: recipe.id,
-          description: recipe.description,
-          thumbnail_url: recipe.thumbnail_url,
-          ingredients: recipe.ingredients,
-          directions: recipe.directions,
-        },
-      });
+        variables: {...recipeToSave },
+      })
+     // if book successfully saves to user's account, save book id to state
+      setSavedRecipeIds([
+        ...savedRecipeIds, recipeToSave.id
+      ])
     } catch (err) {
       console.error(err);
     }
   };
+
 
   return (
     <>
@@ -231,13 +213,13 @@ const SearchRecipes = (props) => {
                   </Button>
                   {Auth.loggedIn() && (
                     <Button
-                      disabled={user.savedRecipeIds?.some(
+                      disabled={savedRecipeIds?.some(
                         (savedRecipeId) => savedRecipeId === recipe.id
                       )}
                       className="btn-block btn-info"
-                      onClick={() => handleSaveRecipe(recipe)}
+                      onClick={() => handleSaveRecipe(recipe.id)}
                     >
-                      {user.savedRecipeIds?.some(
+                      {savedRecipeIds?.some(
                         (savedRecipeId) => savedRecipeId === recipe.id
                       )
                         ? "This recipe has already been saved!"
