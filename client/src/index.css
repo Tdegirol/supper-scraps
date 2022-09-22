@@ -17,6 +17,10 @@ code {
   cursor: pointer;
 }
 
+.title-caption {
+  font-size:small;
+}
+
 .main-mosaic-container {
   width: 100%;
   height: 500px;
