@@ -47,7 +47,7 @@ const SearchRecipes = (props) => {
   if (savedRecipeIds.length < user?.savedRecipeIds.length) {
     setSavedRecipeIds(user.savedRecipeIds)
   }
-  console.log(user, user?.savedRecipeIds, savedRecipeIds);
+  // console.log(user, user?.savedRecipeIds, savedRecipeIds);
   const client = useApolloClient();
   
   // create method to search for recipes and set state on form submit
