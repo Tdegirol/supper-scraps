@@ -52,7 +52,7 @@ const SavedRecipes = () => {
       <Container>
         <h2>
           {userData.savedRecipes.length
-            ? `Viewing ${userData.savedRecipes.length} saved ${userData.savedRecipes.length === 1 ? 'recipe' : 'recipes'}:`
+            ? `${userData.savedRecipes.length} ${userData.savedRecipes.length === 1 ? 'recipe' : 'recipes'} saved!`
             : 'You have no saved recipes!'}
         </h2>
         <CardColumns>

@@ -71,10 +71,12 @@ html {
   background-size: cover;
   background-attachment: fixed;
   background-position: 80%;
+  background-color: #343a40;
 }
 
 .content-container {
   min-height: calc(100vh - 224px);
+  /* background-color: #343a40; */
 } 
 
 .footer--pin {

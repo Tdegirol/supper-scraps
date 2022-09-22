@@ -98,6 +98,7 @@ const [savedRecipeIds, setSavedRecipeIds] = useState([]);
                 type="submit"
                 variant="success"
                 size="lg"
+                className="my-2"
                 onClick={handleFormSubmitDinner}
               >
                 Find Dinner Recipes!
@@ -108,6 +109,7 @@ const [savedRecipeIds, setSavedRecipeIds] = useState([]);
                 type="submit"
                 variant="success"
                 size="lg"
+                className="my-2"
                 onClick={handleFormSubmitDessert}
               >
                 Find Dessert Recipes!
