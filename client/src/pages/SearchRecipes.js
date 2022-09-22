@@ -27,7 +27,7 @@ const SearchRecipes = (props) => {
     searchedRecipes,
     setSearchedRecipes,
     isMore,
-    // setIsMore,
+    setIsMore,
     page,
     setPage,
   } = props.value;
@@ -39,13 +39,17 @@ const SearchRecipes = (props) => {
   const [error, setError] = useState("");
   // save recipe using graphql
   const [saveRecipe] = useMutation(SAVE_RECIPE);
+  // Check if logged in
+  const { loading, data } = useQuery(GET_ME);
+  const user = data?.me;
   // removed loading from const { loading, data } since we aren't calling it... yet.
   const [savedRecipeIds, setSavedRecipeIds] = useState([]);
-  const { data } = useQuery(GET_ME);
+  if (savedRecipeIds.length < user?.savedRecipeIds.length) {
+    setSavedRecipeIds(user.savedRecipeIds)
+  }
+  console.log(user, user?.savedRecipeIds, savedRecipeIds);
   const client = useApolloClient();
-  // Check if logged in
-  const user = data?.me;
-
+  
   // create method to search for recipes and set state on form submit
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -70,7 +74,7 @@ const SearchRecipes = (props) => {
       //   })
       setSearchedRecipes(data.getRecipe.recipes);
       // console.log(data.getRecipe.isMore);
-      // setIsMore(data.getRecipe.isMore);
+      setIsMore(data.getRecipe.isMore);
       setPage(0);
       setError("");
     }
@@ -111,7 +115,7 @@ const SearchRecipes = (props) => {
       await saveRecipe({
         variables: {...recipeToSave },
       })
-     // if book successfully saves to user's account, save book id to state
+     // if book successfully saves to user's account, save recipe id to state
       setSavedRecipeIds([
         ...savedRecipeIds, recipeToSave.id
       ])
@@ -153,7 +157,7 @@ const SearchRecipes = (props) => {
         {searchedRecipes.length ? (
           <>
             <h4>
-              {page > 1 ? (
+              {page > 0 ? (
                 <Image className="cp p-1" src={"/images/icons8-left.svg"} onClick={handlePagePrevious} />
               ) : (
                 <Image
