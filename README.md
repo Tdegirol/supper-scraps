@@ -1,16 +1,25 @@
 # Supper Scraps
+Compose a meal with what's left in your fridge! 
+
 
   ## Table of Contents
   - [Description](#description)
   - [User-Story](#userStory)
   - [Installation](#install)
   - [Usage](#usage)
-  - [Questions](#questions)
+  - [Links](#links)
+  - [Credits](#credits)
 
 
   <a id="description"></a>
   ## Description
   This app allows users to log in and search ingredients that they have on hand (or would like to cook with). Then the app returns several recipes that include those ingredients with the option to save each recipe to the user's dashboard. This also offers an inspirations page which will offer some random recipes to try out!
+  
+This application was built using the MERN stack, including Node.js, Express, MongoDB, Mongoose and GraphQL as backend technologies, ApolloServer, and React as well as Javascript, React-Bootstrap framework and Css for front-end technologies.  The Tasty API was utilized for recipes.
+
+  
+![Screen Shot 2022-09-22 at 7 05 50 PM](https://user-images.githubusercontent.com/64170123/191886654-85005008-d9cf-4d41-b9d2-2b31e5f8ed02.png)
+
   
   <a id="userStory"></a>
   ## User Story
@@ -33,17 +42,22 @@
 
   <a id="install"></a>
   ## Installation 
-  npm i
+  If developer wants to run the application from their own server, they can copy the application and run "npm i" in the root folder. 
 
   <a id="usage"></a>
   ## Usage 
-  This app applies: React, GraphQL, Mongoose, MongoDB, React-Boostrap
-
-  Visit the website on heroku at:
-  https://young-shelf-43673.herokuapp.com/
-
   
-  <a id="questions"></a>
-  ## Questions 
-  - Github: [travisramcharran](https://github.com/travisramcharran/recipe-gen)
-  - Email: tdegirol@github.com
+  When the user navigates to the deployed product, they can enter a single ingredient or multiple incregredients they have on hand and receive a list of recipes that include those ingredients.  When they click on the recipe, they will get a detailed list of other ingredients, amounts, and recipe instructions. The user has the option to create an account, and when they log in, they can save their favorite recipes.  If the logged-in user needs some inspiration, they can click on the inspiration tab and receive either a list of random dinner recipes or dessert recipes. 
+  
+ This app applies: React, GraphQL, Mongoose, MongoDB, React-Boostrap
+
+  ## Links 
+Link to website: https://young-shelf-43673.herokuapp.com/
+
+Link to GitHub repo: https://github.com/travisramcharran/recipe-gen
+
+  ## Credits
+[Travis Ramcharran](https://github.com/travisramcharran)
+<br /> [TJ DeGirolamo](https://github.com/Tdegirol)
+<br /> [Chris P. O'Brien](https://github.com/chrispobrien)
+<br /> [Samantha Haberman](https://github.com/Samantha-Ruth)
